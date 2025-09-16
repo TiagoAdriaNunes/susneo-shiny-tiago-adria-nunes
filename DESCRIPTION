@@ -1,0 +1,22 @@
+Package: susneo
+Title: Susneo Shiny App
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "firstname",
+           family = "lastname",
+           role = c("aut", "cre"),
+           email = "tiago.adria@gmail.com")
+Description: Susneo Shiny App.
+License: MIT
+Imports: 
+    attempt,
+    config,
+    DT,
+    glue,
+    golem,
+    htmltools,
+    pkgload,
+    shiny
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
