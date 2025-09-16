@@ -16,6 +16,7 @@ output: github_document
 # `{susneo}`
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/graph/badge.svg)](https://app.codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes)
 <!-- badges: end -->
 
 ## Installation
