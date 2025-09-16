@@ -8,14 +8,17 @@ Authors@R:
            email = "tiago.adria@gmail.com")
 Description: Susneo Shiny App.
 License: MIT
-Imports: 
+Imports:
     attempt,
     config,
+    dplyr,
     DT,
     glue,
     golem,
     htmltools,
+    lubridate,
     pkgload,
+    plotly,
     shiny
 Encoding: UTF-8
 LazyData: true
