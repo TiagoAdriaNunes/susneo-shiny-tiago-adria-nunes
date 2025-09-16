@@ -17,6 +17,7 @@ mod_data_upload_ui <- function(id) {
 #' data_upload Server Functions
 #'
 #' @noRd
+#' @importFrom utils read.csv
 mod_data_upload_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
