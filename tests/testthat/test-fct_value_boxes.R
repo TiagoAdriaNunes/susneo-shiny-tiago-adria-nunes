@@ -136,10 +136,10 @@ test_that("create_efficiency_value_box has correct bslib structure and content",
     expect_equal(result$name, "div")
 
     # Check for the essential content
-    expect_true(grepl('Energy Efficiency Ratio', result_html))
-    expect_true(grepl('10 units/kg CO2e', result_html))
+    expect_true(grepl("Energy Efficiency Ratio", result_html))
+    expect_true(grepl("10 units/kg CO2e", result_html))
 
     # Check that it contains value box related classes/structure
-    expect_true(grepl('value.box|bslib', result_html))
+    expect_true(grepl("value.box|bslib", result_html))
   })
 })
