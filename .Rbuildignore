@@ -12,3 +12,5 @@ $run_dev.*
 ^\.rscignore$
 ^README\.Rmd$
 ^codecov\.yml$
+^\.lintr$
+^\.github$
