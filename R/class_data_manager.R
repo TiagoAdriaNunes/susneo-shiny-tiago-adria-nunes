@@ -168,15 +168,15 @@ data_manager <- R6::R6Class(
       sum(filtered_data$carbon_emission_in_kgco2e, na.rm = TRUE)
     },
     calculate_average_daily_usage = function(filtered_data) {
-      if (nrow(filtered_data) == 0) {
+      if (nrow(filtered_data) == 0 || !"date" %in% names(filtered_data)) {
         0
+      } else {
+        daily_totals <- filtered_data |>
+          dplyr::group_by(date) |>
+          dplyr::summarise(daily_total = sum(value, na.rm = TRUE), .groups = "drop")
+
+        mean(daily_totals$daily_total, na.rm = TRUE)
       }
-
-      daily_totals <- filtered_data |>
-        dplyr::group_by(date) |>
-        dplyr::summarise(daily_total = sum(value, na.rm = TRUE), .groups = "drop")
-
-      mean(daily_totals$daily_total, na.rm = TRUE)
     },
 
     # Data preparation for charts
@@ -219,12 +219,13 @@ data_manager <- R6::R6Class(
 
     # Utility methods
     format_number = function(number, suffix = "") {
-      if (is.na(number) || is.null(number)) {
+      if (is.null(number) || is.na(number) || !is.numeric(number)) {
         "--"
+      } else {
+        formatted <- format(round(number, 0), big.mark = ",")
+        if (suffix != "") formatted <- paste(formatted, suffix)
+        formatted
       }
-      formatted <- format(round(number, 0), big.mark = ",")
-      if (suffix != "") formatted <- paste(formatted, suffix)
-      formatted
     },
     is_data_loaded = function() {
       nrow(self$processed_data()) > 0
