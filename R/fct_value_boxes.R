@@ -1,8 +1,6 @@
 #' Value Box Creation Functions
 #'
 #' @description Business logic functions for creating KPI value boxes
-#'
-#' @noRd
 
 #' Create total energy consumption value box
 #'
@@ -13,7 +11,6 @@
 #'
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
-#'
 #' @noRd
 create_consumption_value_box <- function(data, data_manager) {
   total <- data_manager$calculate_total_consumption(data)
@@ -37,7 +34,6 @@ create_consumption_value_box <- function(data, data_manager) {
 #'
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
-#'
 #' @noRd
 create_emissions_value_box <- function(data, data_manager) {
   total <- data_manager$calculate_total_emissions(data)
@@ -61,7 +57,6 @@ create_emissions_value_box <- function(data, data_manager) {
 #'
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
-#'
 #' @noRd
 create_usage_value_box <- function(data, data_manager) {
   avg <- data_manager$calculate_average_daily_usage(data)
@@ -85,7 +80,6 @@ create_usage_value_box <- function(data, data_manager) {
 #'
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
-#'
 #' @noRd
 create_efficiency_value_box <- function(data, data_manager) {
   total_consumption <- data_manager$calculate_total_consumption(data)
@@ -119,7 +113,6 @@ create_efficiency_value_box <- function(data, data_manager) {
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
 #' @importFrom dplyr group_by summarise
-#'
 #' @noRd
 create_peak_usage_value_box <- function(data, data_manager) {
   if (nrow(data) == 0) {
@@ -147,7 +140,6 @@ create_peak_usage_value_box <- function(data, data_manager) {
 #'
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
-#'
 #' @noRd
 create_facilities_count_value_box <- function(data) {
   if (nrow(data) == 0) {

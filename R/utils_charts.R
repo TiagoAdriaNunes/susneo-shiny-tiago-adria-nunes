@@ -1,13 +1,10 @@
 #' Chart Configuration Utilities
 #'
 #' @description Utility functions for consistent chart styling and configuration
-#'
-#' @noRd
 
 #' Get standard chart colors
 #'
 #' @return Vector of hex color codes for charts
-#'
 #' @noRd
 get_chart_colors <- function() {
   return(c("#2E86AB"))
@@ -16,7 +13,6 @@ get_chart_colors <- function() {
 #' Get primary chart color
 #'
 #' @return Primary blue color hex code
-#'
 #' @noRd
 get_primary_color <- function() {
   return("#2E86AB")
@@ -27,7 +23,6 @@ get_primary_color <- function() {
 #' @return htmlwidgets::JS object for Highcharts number formatting
 #'
 #' @importFrom htmlwidgets JS
-#'
 #' @noRd
 get_chart_formatter_js <- function() {
   htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '', ','); }")
@@ -40,7 +35,6 @@ get_chart_formatter_js <- function() {
 #' @return Highcharts object with no data message
 #'
 #' @importFrom highcharter highchart hc_title
-#'
 #' @noRd
 create_empty_chart <- function(title = "No data available") {
   highcharter::highchart() |>
@@ -52,7 +46,6 @@ create_empty_chart <- function(title = "No data available") {
 #' @param point_format Format string for tooltip (e.g., "Energy: {point.y:,.0f} units")
 #'
 #' @return List with tooltip configuration
-#'
 #' @noRd
 get_chart_tooltip_config <- function(point_format) {
   list(pointFormat = point_format)
@@ -64,7 +57,6 @@ get_chart_tooltip_config <- function(point_format) {
 #' @param formatter_js Optional JavaScript formatter function
 #'
 #' @return List with axis configuration
-#'
 #' @noRd
 get_chart_axis_config <- function(title, formatter_js = NULL) {
   config <- list(title = list(text = title))
@@ -85,7 +77,6 @@ get_chart_axis_config <- function(title, formatter_js = NULL) {
 #' @param color Chart color (optional, uses default if NULL)
 #'
 #' @return List with complete chart configuration
-#'
 #' @noRd
 get_standard_chart_config <- function(title, x_axis_title, y_axis_title, tooltip_format, color = NULL) {
   list(

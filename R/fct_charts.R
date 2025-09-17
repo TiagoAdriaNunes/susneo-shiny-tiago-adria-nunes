@@ -1,8 +1,6 @@
 #' Chart Creation Functions
 #'
 #' @description Business logic functions for creating dashboard charts
-#'
-#' @noRd
 
 #' Create time series line chart
 #'
@@ -12,7 +10,6 @@
 #' @return Highcharts time series chart
 #'
 #' @importFrom highcharter hchart hcaes hc_title hc_xAxis hc_yAxis hc_tooltip hc_colors
-#'
 #' @noRd
 create_time_series_chart <- function(data, data_manager) {
   if (nrow(data) == 0) {
@@ -51,7 +48,6 @@ create_time_series_chart <- function(data, data_manager) {
 #' @return Highcharts column chart
 #'
 #' @importFrom highcharter hchart hcaes hc_title hc_xAxis hc_yAxis hc_tooltip hc_colors
-#'
 #' @noRd
 create_facility_chart <- function(data, data_manager) {
   if (nrow(data) == 0) {
@@ -91,7 +87,6 @@ create_facility_chart <- function(data, data_manager) {
 #'
 #' @importFrom highcharter hchart hc_title hc_tooltip hc_colors
 #' @importFrom dplyr group_by summarise arrange desc
-#'
 #' @noRd
 create_energy_type_chart <- function(data, data_manager) {
   if (nrow(data) == 0) {
@@ -123,7 +118,6 @@ create_energy_type_chart <- function(data, data_manager) {
 #'
 #' @importFrom highcharter hchart hcaes hc_title hc_xAxis hc_yAxis hc_tooltip hc_colors
 #' @importFrom dplyr group_by summarise arrange mutate lag
-#'
 #' @noRd
 create_trend_chart <- function(data, data_manager) {
   if (nrow(data) == 0) {

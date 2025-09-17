@@ -1,8 +1,6 @@
 #' Number and Text Formatting Utilities
 #'
 #' @description Utility functions for consistent number and text formatting
-#'
-#' @noRd
 
 #' Format number with thousands separators
 #'
@@ -14,7 +12,6 @@
 #' @examples
 #' format_number_with_commas(1234.5, "units")
 #' format_number_with_commas(0)
-#'
 #' @noRd
 format_number_with_commas <- function(number, suffix = "") {
   if (is.na(number) || is.null(number)) {
@@ -30,7 +27,6 @@ format_number_with_commas <- function(number, suffix = "") {
 #' @param value Numeric energy value
 #'
 #' @return Formatted string with "units" suffix
-#'
 #' @noRd
 format_energy_units <- function(value) {
   format_number_with_commas(value, "units")
@@ -41,7 +37,6 @@ format_energy_units <- function(value) {
 #' @param value Numeric emissions value
 #'
 #' @return Formatted string with "kg CO2e" suffix
-#'
 #' @noRd
 format_emissions_units <- function(value) {
   format_number_with_commas(value, "kg CO2e")
@@ -52,7 +47,6 @@ format_emissions_units <- function(value) {
 #' @param value Numeric daily usage value
 #'
 #' @return Formatted string with "units/day" suffix
-#'
 #' @noRd
 format_daily_usage_units <- function(value) {
   format_number_with_commas(value, "units/day")
@@ -64,7 +58,6 @@ format_daily_usage_units <- function(value) {
 #' @param digits Number of decimal places
 #'
 #' @return Formatted percentage string
-#'
 #' @noRd
 format_percentage <- function(value, digits = 1) {
   if (is.na(value) || is.null(value)) {
