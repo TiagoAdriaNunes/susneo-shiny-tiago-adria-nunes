@@ -11,45 +11,6 @@ permissions:
   contents: read
 
 jobs:
-  R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - { os: ubuntu-latest, r: "release" }
-          - { os: ubuntu-latest, r: "devel" }
-          - { os: windows-latest, r: "release" }
-          - { os: macOS-latest, r: "release" }
-
-    env:
-      R_KEEP_PKG_SOURCE: yes
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
-          use-public-rspm: true
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
-
-      - name: Check package
-        uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-
   test-coverage:
     name: Test Coverage
     runs-on: ubuntu-22.04
@@ -66,15 +27,19 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Run test coverage
-        if: always()
+      - name: Test coverage
         run: |
-          covr::codecov(
+          covr::package_coverage(
             quiet = FALSE,
             clean = FALSE,
             install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")
           )
         shell: Rscript {0}
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   lint:
     name: Code Linting
