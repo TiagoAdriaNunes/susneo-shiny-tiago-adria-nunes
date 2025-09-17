@@ -36,7 +36,7 @@ data_manager <- R6::R6Class(
           warning("Could not load sample_data: ", e$message)
           self$raw_data(data.frame())
           self$processed_data(data.frame())
-          return(FALSE)
+          FALSE
         }
       )
     },
@@ -55,7 +55,7 @@ data_manager <- R6::R6Class(
         },
         error = function(e) {
           warning("Could not load uploaded file: ", e$message)
-          return(FALSE)
+          FALSE
         }
       )
     },
@@ -93,36 +93,36 @@ data_manager <- R6::R6Class(
     },
     validate_data = function(data) {
       required_cols <- c("site", "date", "type", "value")
-      return(all(required_cols %in% names(data)) && nrow(data) > 0)
+      all(required_cols %in% names(data)) && nrow(data) > 0
     },
 
     # Data access methods
     get_raw_data = function() {
-      return(self$raw_data)
+      self$raw_data
     },
     get_processed_data = function() {
-      return(self$processed_data)
+      self$processed_data
     },
     get_facilities = function() {
       data <- self$processed_data()
       if (nrow(data) == 0) {
-        return(character(0))
+        character(0)
       }
-      return(unique(data$site))
+      unique(data$site)
     },
     get_energy_types = function() {
       data <- self$processed_data()
       if (nrow(data) == 0) {
-        return(character(0))
+        character(0)
       }
-      return(unique(data$type))
+      unique(data$type)
     },
     get_date_range = function() {
       data <- self$processed_data()
       if (nrow(data) == 0) {
-        return(c(Sys.Date(), Sys.Date()))
+        c(Sys.Date(), Sys.Date())
       }
-      return(c(min(data$date, na.rm = TRUE), max(data$date, na.rm = TRUE)))
+      c(min(data$date, na.rm = TRUE), max(data$date, na.rm = TRUE))
     },
 
     # Filtering methods
@@ -130,7 +130,7 @@ data_manager <- R6::R6Class(
       data <- self$processed_data()
 
       if (nrow(data) == 0) {
-        return(data.frame())
+        data.frame()
       }
 
       # Apply date filter
@@ -154,58 +154,58 @@ data_manager <- R6::R6Class(
     # Calculation methods
     calculate_total_consumption = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
-        return(0)
+        0
       }
-      return(sum(filtered_data$value, na.rm = TRUE))
+      sum(filtered_data$value, na.rm = TRUE)
     },
     calculate_total_emissions = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
-        return(0)
+        0
       }
       if (!"carbon_emission_in_kgco2e" %in% names(filtered_data)) {
-        return(0)
+        0
       }
-      return(sum(filtered_data$carbon_emission_in_kgco2e, na.rm = TRUE))
+      sum(filtered_data$carbon_emission_in_kgco2e, na.rm = TRUE)
     },
     calculate_average_daily_usage = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
-        return(0)
+        0
       }
 
       daily_totals <- filtered_data |>
         dplyr::group_by(date) |>
         dplyr::summarise(daily_total = sum(value, na.rm = TRUE), .groups = "drop")
 
-      return(mean(daily_totals$daily_total, na.rm = TRUE))
+      mean(daily_totals$daily_total, na.rm = TRUE)
     },
 
     # Data preparation for charts
     prepare_time_series_data = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
-        return(data.frame())
+        data.frame()
       }
 
-      return(filtered_data |>
+      filtered_data |>
         dplyr::group_by(date) |>
         dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::arrange(date))
+        dplyr::arrange(date)
     },
     prepare_facility_data = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
-        return(data.frame())
+        data.frame()
       }
 
-      return(filtered_data |>
+      filtered_data |>
         dplyr::group_by(site) |>
         dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::arrange(dplyr::desc(total_value)))
+        dplyr::arrange(dplyr::desc(total_value))
     },
     prepare_summary_data = function(filtered_data) {
       if (nrow(filtered_data) == 0) {
         return(data.frame())
       }
 
-      return(filtered_data |>
+      filtered_data |>
         dplyr::group_by(site, type) |>
         dplyr::summarise(
           total_consumption = sum(value, na.rm = TRUE),
@@ -214,20 +214,20 @@ data_manager <- R6::R6Class(
           records = dplyr::n(),
           .groups = "drop"
         ) |>
-        dplyr::arrange(dplyr::desc(total_consumption)))
+        dplyr::arrange(dplyr::desc(total_consumption))
     },
 
     # Utility methods
     format_number = function(number, suffix = "") {
       if (is.na(number) || is.null(number)) {
-        return("--")
+        "--"
       }
       formatted <- format(round(number, 0), big.mark = ",")
       if (suffix != "") formatted <- paste(formatted, suffix)
-      return(formatted)
+      formatted
     },
     is_data_loaded = function() {
-      return(nrow(self$processed_data()) > 0)
+      nrow(self$processed_data()) > 0
     }
   )
 )

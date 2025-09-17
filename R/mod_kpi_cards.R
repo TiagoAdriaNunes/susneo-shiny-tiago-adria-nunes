@@ -120,7 +120,7 @@ mod_kpi_cards_extended_server <- function(id, data_manager, filtered_data) {
 
     output$facilities_count_box <- renderUI({
       data <- filtered_data()
-      create_facilities_count_value_box(data)
+      create_facilities_value_box(data)
     })
   })
 }

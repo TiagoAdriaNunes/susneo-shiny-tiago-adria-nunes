@@ -132,7 +132,7 @@ create_peak_usage_value_box <- function(data, data_manager) {
   )
 }
 
-#' Create facilities count value box
+#' Create facilities value box
 #'
 #' @param data Filtered data from data_manager
 #'
@@ -141,7 +141,7 @@ create_peak_usage_value_box <- function(data, data_manager) {
 #' @importFrom bslib value_box
 #' @importFrom bsicons bs_icon
 #' @noRd
-create_facilities_count_value_box <- function(data) {
+create_facilities_value_box <- function(data) {
   if (nrow(data) == 0) {
     count_formatted <- "0"
   } else {

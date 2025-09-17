@@ -76,6 +76,6 @@ mod_data_upload_server <- function(id) {
     })
 
     # Return the data manager instance
-    return(dm)
+    dm
   })
 }
