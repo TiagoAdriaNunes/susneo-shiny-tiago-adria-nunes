@@ -6,66 +6,69 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList fluidRow column h3 dateRangeInput selectizeInput verbatimTextOutput
+#' @importFrom shiny NS tagList h1 dateRangeInput selectizeInput actionButton div
 #' @importFrom DT dataTableOutput
-#' @importFrom plotly plotlyOutput
+#' @importFrom highcharter highchartOutput
+#' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns
+#' @importFrom bsicons bs_icon
 mod_dashboard_ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    fluidRow(
-      column(
-        6,
-        h3("Date Range"),
-        dateRangeInput(ns("date_range"),
-          label = NULL,
-          start = Sys.Date() - 30,
-          end = Sys.Date()
+
+  bslib::page_sidebar(
+    title = "SUSNEO Energy Dashboard",
+    sidebar = bslib::sidebar(
+      width = 300,
+      h3("Filters"),
+      dateRangeInput(ns("date_range"),
+        label = "Date Range",
+        start = Sys.Date() - 30,
+        end = Sys.Date()
+      ),
+      selectizeInput(ns("facilities"),
+        label = "Facilities",
+        choices = NULL,
+        multiple = TRUE,
+        options = list(placeholder = "Select facilities...")
+      ),
+      selectizeInput(ns("energy_types"),
+        label = "Energy Types",
+        choices = NULL,
+        multiple = TRUE,
+        options = list(placeholder = "Select energy types...")
+      ),
+      br(),
+      div(
+        style = "text-align: right;",
+        actionButton(ns("reset_filters"),
+          label = "Reset Filters",
+          class = "btn-outline-secondary btn-sm"
+        )
+      )
+    ),
+    bslib::card(
+      bslib::card_header("Key Performance Indicators"),
+      bslib::card_body(
+        mod_kpi_cards_ui(ns("kpi_cards"))
+      )
+    ),
+    bslib::layout_columns(
+      col_widths = c(6, 6),
+      bslib::card(
+        bslib::card_header("Energy Consumption Over Time"),
+        bslib::card_body(
+          highcharter::highchartOutput(ns("time_series_plot"))
         )
       ),
-      column(
-        6,
-        h3("Facilities"),
-        selectizeInput(ns("facilities"),
-          label = NULL,
-          choices = NULL,
-          multiple = TRUE,
-          options = list(placeholder = "Select facilities...")
+      bslib::card(
+        bslib::card_header("Energy Usage by Facility"),
+        bslib::card_body(
+          highcharter::highchartOutput(ns("facility_comparison"))
         )
       )
     ),
-    fluidRow(
-      column(
-        4,
-        h3("Total Energy Consumption"),
-        verbatimTextOutput(ns("total_consumption"))
-      ),
-      column(
-        4,
-        h3("Total Carbon Emissions"),
-        verbatimTextOutput(ns("total_emissions"))
-      ),
-      column(
-        4,
-        h3("Average Daily Usage"),
-        verbatimTextOutput(ns("avg_daily_usage"))
-      )
-    ),
-    fluidRow(
-      column(
-        6,
-        h3("Energy Consumption Over Time"),
-        plotly::plotlyOutput(ns("time_series_plot"))
-      ),
-      column(
-        6,
-        h3("Energy Usage by Facility"),
-        plotly::plotlyOutput(ns("facility_comparison"))
-      )
-    ),
-    fluidRow(
-      column(
-        12,
-        h3("Data Summary"),
+    bslib::card(
+      bslib::card_header("Data Summary"),
+      bslib::card_body(
         DT::dataTableOutput(ns("data_table"))
       )
     )
@@ -74,125 +77,84 @@ mod_dashboard_ui <- function(id) {
 
 #' dashboard Server Functions
 #'
-#' @param data_reactive Reactive data from data upload module
+#' @param data_manager Data manager instance from data upload module
 #' @noRd
-#' @importFrom shiny moduleServer reactive observe updateSelectizeInput renderText
+#' @importFrom shiny moduleServer reactive observe updateSelectizeInput updateDateRangeInput renderUI observeEvent showNotification isolate
 #' @importFrom DT renderDataTable datatable
-#' @importFrom plotly renderPlotly plot_ly add_trace layout
-#' @importFrom dplyr filter group_by summarise mutate arrange
-#' @importFrom lubridate as_date
-mod_dashboard_server <- function(id, data_reactive) {
+#' @importFrom highcharter renderHighchart hchart hc_add_series hc_title hc_xAxis hc_yAxis
+mod_dashboard_server <- function(id, data_manager) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     observe({
-      req(data_reactive())
-      data <- data_reactive()
+      req(data_manager$is_data_loaded())
 
-      if (nrow(data) > 0 && "site" %in% names(data)) {
-        facilities <- unique(data$site)
+      isolate({
+        facilities <- data_manager$get_facilities()
+        energy_types <- data_manager$get_energy_types()
+        date_range <- data_manager$get_date_range()
+
         updateSelectizeInput(session, "facilities",
           choices = facilities,
-          selected = facilities
+          selected = NULL
+        )
+
+        updateSelectizeInput(session, "energy_types",
+          choices = energy_types,
+          selected = NULL
+        )
+
+        updateDateRangeInput(session, "date_range",
+          start = date_range[1],
+          end = date_range[2],
+          min = date_range[1],
+          max = date_range[2]
+        )
+      })
+    })
+
+    observeEvent(input$reset_filters, {
+      if (data_manager$is_data_loaded()) {
+        date_range <- data_manager$get_date_range()
+
+        updateDateRangeInput(session, "date_range",
+          start = date_range[1],
+          end = date_range[2]
+        )
+
+        updateSelectizeInput(session, "facilities", selected = character(0))
+        updateSelectizeInput(session, "energy_types", selected = character(0))
+
+        showNotification(
+          "Filters have been cleared",
+          type = "message",
+          duration = 3
         )
       }
     })
 
     filtered_data <- reactive({
-      req(data_reactive())
-      data <- data_reactive()
+      req(data_manager$is_data_loaded())
 
-      if (nrow(data) == 0) {
-        return(data.frame())
-      }
-
-      data$date <- lubridate::as_date(data$date, format = "%d-%m-%Y")
-
-      if (!is.null(input$date_range)) {
-        data <- data[data$date >= input$date_range[1] & data$date <= input$date_range[2], ]
-      }
-
-      if (!is.null(input$facilities) && length(input$facilities) > 0) {
-        data <- data[data$site %in% input$facilities, ]
-      }
-
-      data
+      data_manager$apply_filters(
+        date_range = input$date_range,
+        facilities = input$facilities,
+        energy_types = input$energy_types
+      )
     })
 
-    output$total_consumption <- renderText({
-      data <- filtered_data()
-      if (nrow(data) == 0) {
-        return("No data")
-      }
+    # KPI Cards submodule
+    mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
 
-      total <- sum(data$value, na.rm = TRUE)
-      paste(format(total, big.mark = ","), "units")
+    # Charts using extracted functions
+    output$time_series_plot <- highcharter::renderHighchart({
+      data <- filtered_data()
+      create_time_series_chart(data, data_manager)
     })
 
-    output$total_emissions <- renderText({
+    output$facility_comparison <- highcharter::renderHighchart({
       data <- filtered_data()
-      if (nrow(data) == 0) {
-        return("No data")
-      }
-
-      total <- sum(data$carbon_emission_in_kgco2e, na.rm = TRUE)
-      paste(format(total, big.mark = ","), "kg CO2e")
-    })
-
-    output$avg_daily_usage <- renderText({
-      data <- filtered_data()
-      if (nrow(data) == 0) {
-        return("No data")
-      }
-
-      daily_totals <- data |>
-        dplyr::group_by(date) |>
-        dplyr::summarise(daily_total = sum(value, na.rm = TRUE), .groups = "drop")
-
-      avg_daily <- mean(daily_totals$daily_total, na.rm = TRUE)
-      paste(format(round(avg_daily, 0), big.mark = ","), "units/day")
-    })
-
-    output$time_series_plot <- plotly::renderPlotly({
-      data <- filtered_data()
-      if (nrow(data) == 0) {
-        return(plotly::plot_ly() |> plotly::layout(title = "No data available"))
-      }
-
-      daily_data <- data |>
-        dplyr::group_by(date) |>
-        dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::arrange(date)
-
-      p <- plotly::plot_ly(daily_data, x = ~date, y = ~total_value, type = "scatter", mode = "lines+markers") |>
-        plotly::layout(
-          title = "Daily Energy Consumption",
-          xaxis = list(title = "Date"),
-          yaxis = list(title = "Energy Consumption (units)")
-        )
-
-      p
-    })
-
-    output$facility_comparison <- plotly::renderPlotly({
-      data <- filtered_data()
-      if (nrow(data) == 0) {
-        return(plotly::plot_ly() |> plotly::layout(title = "No data available"))
-      }
-
-      facility_data <- data |>
-        dplyr::group_by(site) |>
-        dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::arrange(dplyr::desc(total_value))
-
-      p <- plotly::plot_ly(facility_data, x = ~site, y = ~total_value, type = "bar") |>
-        plotly::layout(
-          title = "Total Energy Consumption by Facility",
-          xaxis = list(title = "Facility"),
-          yaxis = list(title = "Total Energy Consumption (units)")
-        )
-
-      p
+      create_facility_chart(data, data_manager)
     })
 
     output$data_table <- DT::renderDataTable({
@@ -201,24 +163,28 @@ mod_dashboard_server <- function(id, data_reactive) {
         return(data.frame())
       }
 
-      summary_data <- data |>
-        dplyr::group_by(site, type) |>
-        dplyr::summarise(
-          total_consumption = sum(value, na.rm = TRUE),
-          total_emissions = sum(carbon_emission_in_kgco2e, na.rm = TRUE),
-          avg_consumption = round(mean(value, na.rm = TRUE), 2),
-          records = dplyr::n(),
-          .groups = "drop"
-        ) |>
-        dplyr::arrange(dplyr::desc(total_consumption))
+      summary_data <- data_manager$prepare_summary_data(data)
 
       DT::datatable(summary_data,
-        options = list(pageLength = 10, scrollX = TRUE),
+        rownames = FALSE,
+        options = list(
+          pageLength = 10,
+          scrollX = TRUE,
+          columnDefs = list(
+            list(targets = c(2, 3, 4), className = "dt-right")
+          )
+        ),
         colnames = c(
           "Site", "Energy Type", "Total Consumption",
-          "Total Emissions (kg CO2e)", "Avg Consumption", "Records"
+          "Total Emissions (kg CO2e)", "Avg. Consumption", "Records"
         )
-      )
+      ) |>
+        DT::formatCurrency(
+          columns = c("total_consumption", "total_emissions", "avg_consumption"),
+          currency = "",
+          digits = 0,
+          mark = ","
+        )
     })
   })
 }
