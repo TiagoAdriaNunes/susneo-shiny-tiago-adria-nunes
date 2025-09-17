@@ -128,7 +128,7 @@ mod_dashboard_server <- function(id, data_manager) {
         showNotification(
           "Filters have been cleared",
           type = "message",
-          duration = 3
+          duration = 5
         )
       }
     })
