@@ -26,13 +26,14 @@ data_manager <- R6::R6Class(
     load_sample_data = function() {
       tryCatch(
         {
-          data <- utils::read.csv("data/sample_data.csv", stringsAsFactors = FALSE)
-          self$raw_data(data)
+          # Load sample_data from package data
+          data("sample_data", package = "susneo", envir = environment())
+          self$raw_data(sample_data)
           self$process_data()
           return(TRUE)
         },
         error = function(e) {
-          warning("Could not load data/sample_data.csv: ", e$message)
+          warning("Could not load sample_data: ", e$message)
           self$raw_data(data.frame())
           self$processed_data(data.frame())
           return(FALSE)
