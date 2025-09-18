@@ -263,16 +263,17 @@ covr::package_coverage()
 
 ### Recent Updates
 
-- ✅ Comprehensive test suite with 160+ tests
+- ✅ Comprehensive test suite with 240+ tests
+- ✅ Enhanced module test coverage (dashboard, KPI cards, data upload)
 - ✅ CI/CD pipeline with multi-platform testing
 - ✅ Code coverage tracking
 - ✅ Automated linting and code quality checks
 - ✅ Documentation with pkgdown
 - ✅ Sample data and example usage
+- ✅ Resolved namespace conflicts and import issues
 
 ### Known Issues
 
-- ⚠️ Namespace conflicts between shiny and DT packages (minor warnings)
 - 📝 Check [Issues page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues) for current status
 
 ### Roadmap
