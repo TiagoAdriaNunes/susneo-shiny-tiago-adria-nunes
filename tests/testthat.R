@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(susneo)
+library(susneoEnergyDashboard)
 
-test_check("susneo")
+test_check("susneoEnergyDashboard")
