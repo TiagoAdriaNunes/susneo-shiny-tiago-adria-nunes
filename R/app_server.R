@@ -2,7 +2,6 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
-#' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
   # Call data upload module and get reactive data

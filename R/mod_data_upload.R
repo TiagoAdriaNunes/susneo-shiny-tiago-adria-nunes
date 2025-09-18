@@ -26,7 +26,7 @@ mod_data_upload_ui <- function(id) {
 #' @param id Module ID
 #' @return data_manager instance
 #' @noRd
-#' @importFrom shiny moduleServer observe observeEvent showNotification
+#' @importFrom shiny moduleServer observe observeEvent showNotification req
 mod_data_upload_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns

@@ -10,7 +10,7 @@ Authors@R:
 Description: Susneo Shiny App.
 License: MIT + file LICENSE
 Imports:
-    bsicons,
+    bsicons (>= 0.1.2),
     bslib,
     config,
     dplyr,
