@@ -1,6 +1,6 @@
 Package: susneoEnergyDashboard
 Title: SUSNEO Energy Dashboard
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Depends: R (>= 4.1.0)
 Authors@R: 
     person(given = "Tiago",

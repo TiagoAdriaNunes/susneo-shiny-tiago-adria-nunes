@@ -2,6 +2,20 @@
 #'
 #' @description Utility functions for consistent chart styling and configuration
 
+#' Set global Highcharts number formatting
+#'
+#' @return JS configuration for global Highcharts options
+#' @noRd
+set_global_chart_options <- function() {
+  htmlwidgets::JS("
+    Highcharts.setOptions({
+      lang: {
+        thousandsSep: ','
+      }
+    });
+  ")
+}
+
 #' Get standard chart colors
 #'
 #' @return Vector of hex color codes for charts
@@ -25,7 +39,7 @@ get_primary_color <- function() {
 #' @importFrom htmlwidgets JS
 #' @noRd
 get_chart_formatter_js <- function() {
-  htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '', ','); }")
+  htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }")
 }
 
 #' Create empty chart with no data message

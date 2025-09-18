@@ -117,7 +117,6 @@ Your CSV files should include these columns:
 ## Usage Examples
 
 ### Basic Usage
-
 ```{r, eval = FALSE}
 # Start the application
 susneoEnergyDashboard::run_app()
@@ -127,7 +126,6 @@ susneoEnergyDashboard::run_app()
 ```
 
 ### Working with Custom Data
-
 ```{r, eval = FALSE}
 # Prepare your data with required columns
 my_data <- data.frame(
@@ -146,7 +144,6 @@ write.csv(my_data, "my_energy_data.csv", row.names = FALSE)
 ## Development
 
 ### Building from Source
-
 ```{r, eval = FALSE}
 # Clone the repository
 git clone https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes.git
@@ -198,7 +195,6 @@ This project is licensed under the MIT License.
 **Compiled**: `r Sys.time()`
 
 ## Development Status
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Check if we're in development environment
 in_dev <- file.exists("DESCRIPTION") && dir.exists("R")
@@ -256,7 +252,6 @@ cat("**Issues**: Check [GitHub Issues](https://github.com/TiagoAdriaNunes/susneo
 ```
 
 ### Package Coverage
-
 ```{r, error = TRUE}
 covr::package_coverage()
 ```

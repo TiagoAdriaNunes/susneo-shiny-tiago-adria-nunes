@@ -17,27 +17,26 @@ create_time_series_chart <- function(data, data_manager) {
   }
 
   daily_data <- data_manager$prepare_time_series_data(data)
-  config <- get_standard_chart_config(
-    title = "Daily Energy Consumption",
-    x_axis_title = "Date",
-    y_axis_title = "Energy Consumption (units)",
-    tooltip_format = "Energy: {point.y:,.0f} units"
-  )
 
   highcharter::hchart(
     daily_data, "line",
-    highcharter::hcaes(x = date, y = total_value)
+    highcharter::hcaes(x = date, y = total_value),
+    name = "Daily Consumption"
   ) |>
-    highcharter::hc_title(text = config$title) |>
-    highcharter::hc_xAxis(title = list(text = config$x_axis$title$text)) |>
+    highcharter::hc_title(text = "Daily Energy Consumption") |>
+    highcharter::hc_xAxis(title = list(text = "Date")) |>
     highcharter::hc_yAxis(
-      title = list(text = config$y_axis$title$text),
-      labels = config$y_axis$labels
+      title = list(text = "Energy Consumption (units)"),
+      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
     ) |>
     highcharter::hc_tooltip(
-      pointFormat = config$tooltip$pointFormat
+      useHTML = TRUE,
+      formatter = htmlwidgets::JS("function() {
+        return '<b>' + Highcharts.dateFormat('%A, %B %e, %Y', this.x) + '</b><br>' +
+               'Energy: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
+      }")
     ) |>
-    highcharter::hc_colors(c(config$color))
+    highcharter::hc_colors(c("#2E86AB"))
 }
 
 #' Create facility comparison column chart
@@ -55,27 +54,25 @@ create_facility_chart <- function(data, data_manager) {
   }
 
   facility_data <- data_manager$prepare_facility_data(data)
-  config <- get_standard_chart_config(
-    title = "Total Energy Consumption by Facility",
-    x_axis_title = "Facility",
-    y_axis_title = "Total Energy Consumption (units)",
-    tooltip_format = "Total: {point.y:,.0f} units"
-  )
 
   highcharter::hchart(
     facility_data, "column",
     highcharter::hcaes(x = site, y = total_value)
   ) |>
-    highcharter::hc_title(text = config$title) |>
-    highcharter::hc_xAxis(title = list(text = config$x_axis$title$text)) |>
+    highcharter::hc_title(text = "Total Energy Consumption by Facility") |>
+    highcharter::hc_xAxis(title = list(text = "Facility")) |>
     highcharter::hc_yAxis(
-      title = list(text = config$y_axis$title$text),
-      labels = config$y_axis$labels
+      title = list(text = "Total Energy Consumption (units)"),
+      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
     ) |>
     highcharter::hc_tooltip(
-      pointFormat = config$tooltip$pointFormat
+      useHTML = TRUE,
+      formatter = htmlwidgets::JS("function() {
+        return '<b>' + this.point.name + '</b><br>' +
+               'Total: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
+      }")
     ) |>
-    highcharter::hc_colors(c(config$color))
+    highcharter::hc_colors(c("#2E86AB"))
 }
 
 #' Create energy type distribution pie chart
@@ -104,7 +101,12 @@ create_energy_type_chart <- function(data, data_manager) {
   ) |>
     highcharter::hc_title(text = "Energy Consumption by Type") |>
     highcharter::hc_tooltip(
-      pointFormat = "Total: {point.y:,.0f} units<br>Percentage: {point.percentage:.1f}%"
+      useHTML = TRUE,
+      formatter = htmlwidgets::JS("function() {
+        return '<b>' + this.point.name + '</b><br>' +
+               'Total: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units<br>' +
+               'Percentage: ' + Highcharts.numberFormat(this.percentage, 1) + '%';
+      }")
     ) |>
     highcharter::hc_colors(c("#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#593E2C"))
 }
@@ -135,16 +137,21 @@ create_trend_chart <- function(data, data_manager) {
 
   highcharter::hchart(
     daily_data, "line",
-    highcharter::hcaes(x = date, y = total_value)
+    highcharter::hcaes(x = date, y = total_value),
+    name = "Trend Analysis"
   ) |>
     highcharter::hc_title(text = "Energy Consumption Trend Analysis") |>
     highcharter::hc_xAxis(title = list(text = "Date")) |>
     highcharter::hc_yAxis(
       title = list(text = "Energy Consumption (units)"),
-      labels = list(formatter = get_chart_formatter_js())
+      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
     ) |>
     highcharter::hc_tooltip(
-      pointFormat = "Daily: {point.y:,.0f} units"
+      useHTML = TRUE,
+      formatter = htmlwidgets::JS("function() {
+        return '<b>' + Highcharts.dateFormat('%A, %B %e, %Y', this.x) + '</b><br>' +
+               'Energy: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
+      }")
     ) |>
-    highcharter::hc_colors(c(get_primary_color()))
+    highcharter::hc_colors(c("#2E86AB"))
 }
