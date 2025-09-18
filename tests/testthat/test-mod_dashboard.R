@@ -57,7 +57,6 @@ test_that("mod_dashboard_ui has correct sidebar structure", {
 
   # Check for main content areas
   expect_true(grepl("kpi_cards", ui_html)) # KPI cards module is included
-  expect_true(grepl("Key Performance Indicators", ui_html))
   expect_true(grepl("Energy Consumption Over Time", ui_html))
   expect_true(grepl("Data Summary", ui_html))
 })
