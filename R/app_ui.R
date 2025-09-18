@@ -9,18 +9,22 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Set global Highcharts options for number formatting
-    shiny::tags$script(htmlwidgets::JS("
+    shiny::tags$script(htmlwidgets::JS(
+      "
       Highcharts.setOptions({
         lang: {
           thousandsSep: ','
         }
       });
-    ")),
+    "
+    )),
     # Set global date picker locale to US format
-    shiny::tags$script("
+    shiny::tags$script(
+      "
       $.fn.datepicker.defaults.format = 'mm/dd/yyyy';
       $.fn.datepicker.defaults.language = 'en';
-    "),
+    "
+    ),
     # Enable busy indicators
     useBusyIndicators(spinners = TRUE, pulse = TRUE, fade = TRUE),
     # Your application UI logic
@@ -47,6 +51,12 @@ golem_add_external_resources <- function() {
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "SUSNEO Energy Dashboard"
+    ),
+    # Add responsive value box styles
+    tags$link(
+      rel = "stylesheet",
+      type = "text/css",
+      href = "responsive-value-boxes.css"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

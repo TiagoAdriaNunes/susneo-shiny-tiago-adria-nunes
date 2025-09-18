@@ -56,7 +56,7 @@ test_that("mod_dashboard_ui has correct sidebar structure", {
   expect_true(grepl('id="test-reset_filters"', ui_html))
 
   # Check for main content areas
-  expect_true(grepl("Key Performance Indicators", ui_html))
+  expect_true(grepl("kpi_cards", ui_html)) # KPI cards module is included
   expect_true(grepl("Energy Consumption Over Time", ui_html))
   expect_true(grepl("Data Summary", ui_html))
 })
@@ -79,7 +79,9 @@ test_that("mod_dashboard_server initializes filters correctly", {
 
   testServer(mod_dashboard_server, args = list(data_manager = dm), {
     # Simulate data loading
-    session$setInputs(date_range = c(as.Date("2024-01-01"), as.Date("2024-01-03")))
+    session$setInputs(
+      date_range = c(as.Date("2024-01-01"), as.Date("2024-01-03"))
+    )
 
     # Check that server starts without errors
     expect_true(TRUE)
@@ -104,7 +106,9 @@ test_that("mod_dashboard_server handles filter interactions", {
 
   testServer(mod_dashboard_server, args = list(data_manager = dm), {
     # Test date range filter
-    session$setInputs(date_range = c(as.Date("2024-01-01"), as.Date("2024-01-02")))
+    session$setInputs(
+      date_range = c(as.Date("2024-01-01"), as.Date("2024-01-02"))
+    )
 
     # Test facility selection
     session$setInputs(facilities = c("Site A"))
