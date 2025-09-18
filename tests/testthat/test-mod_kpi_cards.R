@@ -82,3 +82,88 @@ test_that("mod_kpi_cards_ui creates correct basic UI structure", {
   uiOutput_count <- length(gregexpr('class="shiny-html-output"', ui_html)[[1]])
   expect_equal(uiOutput_count, 3)
 })
+
+# Server function tests
+test_that("mod_kpi_cards_server works with valid data", {
+  # Create mock data manager outside testServer
+  dm <- data_manager$new()
+
+  # Create reactive filtered data outside testServer
+  filtered_data <- shiny::reactive({
+    data.frame(
+      date = as.Date(c("2024-01-01", "2024-01-02")),
+      site = c("Site A", "Site B"),
+      type = c("Electricity", "Gas"),
+      value = c(100, 150),
+      carbon_emission_in_kgco2e = c(10, 15)
+    )
+  })
+
+  expect_no_error({
+    testServer(mod_kpi_cards_server, args = list(
+      data_manager = dm,
+      filtered_data = filtered_data
+    ), {
+      # Server should handle the data without errors
+      expect_true(TRUE)
+    })
+  })
+})
+
+test_that("mod_kpi_cards_extended_server works with valid data", {
+  dm <- data_manager$new()
+
+  filtered_data <- shiny::reactive({
+    data.frame(
+      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+      site = c("Site A", "Site B", "Site C"),
+      type = c("Electricity", "Gas", "Water"),
+      value = c(100, 150, 200),
+      carbon_emission_in_kgco2e = c(10, 15, 5)
+    )
+  })
+
+  expect_no_error({
+    testServer(mod_kpi_cards_extended_server, args = list(
+      data_manager = dm,
+      filtered_data = filtered_data
+    ), {
+      # Server should handle the data without errors
+      expect_true(TRUE)
+    })
+  })
+})
+
+test_that("mod_kpi_cards_server handles empty data", {
+  dm <- data_manager$new()
+  filtered_data <- shiny::reactive({
+    data.frame()
+  })
+
+  expect_no_error({
+    testServer(mod_kpi_cards_server, args = list(
+      data_manager = dm,
+      filtered_data = filtered_data
+    ), {
+      # Should handle empty data gracefully
+      expect_true(TRUE)
+    })
+  })
+})
+
+test_that("mod_kpi_cards_extended_server handles empty data", {
+  dm <- data_manager$new()
+  filtered_data <- shiny::reactive({
+    data.frame()
+  })
+
+  expect_no_error({
+    testServer(mod_kpi_cards_extended_server, args = list(
+      data_manager = dm,
+      filtered_data = filtered_data
+    ), {
+      # Should handle empty data gracefully
+      expect_true(TRUE)
+    })
+  })
+})

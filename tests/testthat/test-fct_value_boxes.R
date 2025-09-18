@@ -143,3 +143,123 @@ test_that("create_efficiency_value_box has correct bslib structure and content",
     expect_true(grepl("value.box|bslib", result_html))
   })
 })
+
+# Tests for other value box functions
+test_that("create_consumption_value_box works correctly", {
+  session <- shiny::MockShinySession$new()
+  shiny::withReactiveDomain(session, {
+    dm <- data_manager$new()
+    test_data <- data.frame(
+      site = c("Site_A", "Site_B"),
+      date = c("01-08-2025", "02-08-2025"),
+      type = c("Electricity", "Gas"),
+      value = c(1000, 500),
+      carbon_emission_in_kgco2e = c(100, 50)
+    )
+
+    result <- create_consumption_value_box(test_data, dm)
+    expect_true(inherits(result, "shiny.tag"))
+
+    result_html <- as.character(result)
+    expect_true(grepl("Total Energy Consumption", result_html))
+    expect_true(grepl("lightning-charge", result_html))
+  })
+})
+
+test_that("create_emissions_value_box works correctly", {
+  session <- shiny::MockShinySession$new()
+  shiny::withReactiveDomain(session, {
+    dm <- data_manager$new()
+    test_data <- data.frame(
+      site = c("Site_A", "Site_B"),
+      date = c("01-08-2025", "02-08-2025"),
+      type = c("Electricity", "Gas"),
+      value = c(1000, 500),
+      carbon_emission_in_kgco2e = c(100, 50)
+    )
+
+    result <- create_emissions_value_box(test_data, dm)
+    expect_true(inherits(result, "shiny.tag"))
+
+    result_html <- as.character(result)
+    expect_true(grepl("Total Carbon Emissions", result_html))
+    expect_true(grepl("cloud", result_html))
+  })
+})
+
+test_that("create_usage_value_box works correctly", {
+  session <- shiny::MockShinySession$new()
+  shiny::withReactiveDomain(session, {
+    dm <- data_manager$new()
+    test_data <- data.frame(
+      site = c("Site_A", "Site_B"),
+      date = c("01-08-2025", "02-08-2025"),
+      type = c("Electricity", "Gas"),
+      value = c(1000, 500),
+      carbon_emission_in_kgco2e = c(100, 50)
+    )
+
+    result <- create_usage_value_box(test_data, dm)
+    expect_true(inherits(result, "shiny.tag"))
+
+    result_html <- as.character(result)
+    expect_true(grepl("Average Daily Usage", result_html))
+    expect_true(grepl("calendar3", result_html))
+  })
+})
+
+test_that("create_peak_usage_value_box works correctly", {
+  session <- shiny::MockShinySession$new()
+  shiny::withReactiveDomain(session, {
+    dm <- data_manager$new()
+    test_data <- data.frame(
+      site = c("Site_A", "Site_B"),
+      date = c("01-08-2025", "02-08-2025"),
+      type = c("Electricity", "Gas"),
+      value = c(1000, 500),
+      carbon_emission_in_kgco2e = c(100, 50)
+    )
+
+    result <- create_peak_usage_value_box(test_data, dm)
+    expect_true(inherits(result, "shiny.tag"))
+
+    result_html <- as.character(result)
+    expect_true(grepl("Peak Daily Usage", result_html))
+    expect_true(grepl("graph-up", result_html))
+  })
+})
+
+test_that("create_facilities_value_box works correctly", {
+  test_data <- data.frame(
+    site = c("Site_A", "Site_B", "Site_C"),
+    date = c("01-08-2025", "02-08-2025", "03-08-2025"),
+    type = c("Electricity", "Gas", "Solar"),
+    value = c(1000, 500, 300),
+    carbon_emission_in_kgco2e = c(100, 50, 0)
+  )
+
+  result <- create_facilities_value_box(test_data)
+  expect_true(inherits(result, "shiny.tag"))
+
+  result_html <- as.character(result)
+  expect_true(grepl("Active Facilities", result_html))
+  expect_true(grepl("building", result_html))
+  expect_true(grepl("3", result_html))
+})
+
+test_that("create_facilities_value_box handles empty data", {
+  empty_data <- data.frame(
+    site = character(0),
+    date = character(0),
+    type = character(0),
+    value = numeric(0),
+    carbon_emission_in_kgco2e = numeric(0)
+  )
+
+  result <- create_facilities_value_box(empty_data)
+  expect_true(inherits(result, "shiny.tag"))
+
+  result_html <- as.character(result)
+  expect_true(grepl("Active Facilities", result_html))
+  expect_true(grepl("0", result_html))
+})
