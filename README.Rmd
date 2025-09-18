@@ -117,7 +117,6 @@ Your CSV files should include these columns:
 ## Usage Examples
 
 ### Basic Usage
-
 ```{r, eval = FALSE}
 # Start the application
 susneoEnergyDashboard::run_app()
@@ -127,7 +126,6 @@ susneoEnergyDashboard::run_app()
 ```
 
 ### Working with Custom Data
-
 ```{r, eval = FALSE}
 # Prepare your data with required columns
 my_data <- data.frame(
@@ -146,7 +144,6 @@ write.csv(my_data, "my_energy_data.csv", row.names = FALSE)
 ## Development
 
 ### Building from Source
-
 ```{r, eval = FALSE}
 # Clone the repository
 git clone https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes.git
@@ -198,7 +195,6 @@ This project is licensed under the MIT License.
 **Compiled**: `r Sys.time()`
 
 ## Development Status
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # Check if we're in development environment
 in_dev <- file.exists("DESCRIPTION") && dir.exists("R")
@@ -207,77 +203,74 @@ if (in_dev) {
   # Development environment - load package
   tryCatch({
     devtools::load_all(quiet = TRUE)
-    cat("**Package**: Development version loaded ✅\n")
+    cat("Package: Development version loaded ✅\n")
 
     # Test results summary
     test_results <- try({
       suppressMessages(devtools::test(quiet = TRUE))
-      cat("**Tests**: All tests passing ✅\n")
+      cat("Tests: All tests passing ✅\n")
     }, silent = TRUE)
 
     if (inherits(test_results, "try-error")) {
-      cat("**Tests**: See CI badges for test status\n")
+      cat("Tests: See CI badges for test status\n")
     }
 
     # Coverage info (if available)
     coverage_info <- try({
       suppressMessages(covr::package_coverage(quiet = FALSE))
       coverage_pct <- round(covr::percent_coverage(coverage_info), 1)
-      cat("**Coverage**: ", coverage_pct, "%\n", sep = "")
+      cat("Coverage: ", coverage_pct, "%\n", sep = "")
     }, silent = TRUE)
 
     if (inherits(coverage_info, "try-error")) {
-      cat("**Coverage**: See CI badges for coverage status\n")
+      cat("Coverage: See CI badges for coverage status\n")
     }
 
   }, error = function(e) {
-    cat("**Package**: Development environment detected\n")
-    cat("**Tests**: Run `devtools::test()` to check\n")
-    cat("**Coverage**: Run `covr::package_coverage()` to check\n")
+    cat("Package: Development environment detected\n")
+    cat("Tests: Run `devtools::test()` to check\n")
+    cat("Coverage: Run `covr::package_coverage()` to check\n")
   })
 } else {
   # Check if package is installed
   pkg_installed <- try({
     suppressPackageStartupMessages(library(susneo, quietly = TRUE))
-    cat("**Package**: Installed version loaded ✅\n")
+    cat("Package: Installed version loaded ✅\n")
   }, silent = TRUE)
 
   if (inherits(pkg_installed, "try-error")) {
-    cat("**Package**: Not installed - install from GitHub\n")
+    cat("Package: Not installed - install from GitHub\n")
   }
 
-  cat("**Tests**: See CI badges for current test status\n")
-  cat("**Coverage**: See CI badges for current coverage\n")
+  cat("Tests: See CI badges for current test status\n")
+  cat("Coverage: See CI badges for current coverage\n")
 }
 
 # CI Status (always show)
-cat("**CI Status**: See badges above for current build status\n")
-cat("**Issues**: Check [GitHub Issues](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues)\n")
+cat("CI Status: See badges above for current build status\n")
 ```
 
 ### Package Coverage
-
 ```{r, error = TRUE}
 covr::package_coverage()
 ```
 
 ### Recent Updates
 
-- ✅ Comprehensive test suite with 240+ tests
-- ✅ Enhanced module test coverage (dashboard, KPI cards, data upload)
-- ✅ CI/CD pipeline with multi-platform testing
-- ✅ Code coverage tracking
-- ✅ Automated linting and code quality checks
-- ✅ Documentation with pkgdown
-- ✅ Sample data and example usage
-- ✅ Resolved namespace conflicts and import issues
+- Comprehensive test suite with 240+ tests
+- Enhanced module test coverage (dashboard, KPI cards, data upload)
+- CI/CD pipeline with multi-platform testing
+- Code coverage tracking
+- Automated linting and code quality checks
+- Documentation with pkgdown
+- Sample data and example usage
+- Resolved namespace conflicts and import issues
 
 ### Known Issues
 
-- 📝 Check [Issues page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues) for current status
+- Check [Issues page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues) for current status
 
 ### Roadmap
-
 - [ ] Enhanced data visualization options
 - [ ] Export functionality for charts and reports
 - [ ] Advanced filtering and aggregation features

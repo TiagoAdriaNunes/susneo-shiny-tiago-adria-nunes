@@ -6,7 +6,7 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList h1 dateRangeInput selectizeInput actionButton div h3 br
+#' @importFrom shiny NS tagList h1 dateRangeInput updateDateRangeInput selectizeInput actionButton div h3 br
 #' @importFrom DT dataTableOutput
 #' @importFrom highcharter highchartOutput
 #' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns
@@ -22,7 +22,10 @@ mod_dashboard_ui <- function(id) {
       dateRangeInput(ns("date_range"),
         label = "Date Range",
         start = Sys.Date() - 30,
-        end = Sys.Date()
+        end = Sys.Date(),
+        format = "mm/dd/yyyy",
+        language = "en",
+        separator = " to "
       ),
       selectizeInput(ns("facilities"),
         label = "Facilities",

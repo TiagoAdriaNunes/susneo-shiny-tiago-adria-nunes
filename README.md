@@ -193,69 +193,68 @@ This project is licensed under the MIT License.
 
 ## Version Info
 
-**Version**: 0.0.0.9007 **Compiled**: 2025-09-18 00:36:43.888333
+**Version**: 0.0.0.9008 **Compiled**: 2025-09-18 02:00:00.392927
 
 ## Development Status
 
-    #> **Package**: Development version loaded ✅
+    #> Package: Development version loaded ✅
     #> ✔ | F W  S  OK | Context
     #> ⠏ |          0 | app_config                                                                                           ✔ |          5 | app_config
-    #> ⠏ |          0 | app_server                                                                                           ✔ |          3 | app_server
-    #> ⠏ |          0 | app_ui                                                                                               ⠋ |          1 | app_ui                                                                                               ⠸ |          4 | app_ui                                                                                               ✔ |          5 | app_ui
-    #> ⠏ |          0 | data-manager                                                                                         ⠸ |          4 | data-manager                                                                                         ⠇ |          9 | data-manager                                                                                         ⠹ |         13 | data-manager                                                                                         ✔ |         15 | data-manager
+    #> ⠏ |          0 | app_server                                                                                           ⠙ |          2 | app_server                                                                                           ✔ |          3 | app_server
+    #> ⠏ |          0 | app_ui                                                                                               ⠋ |          1 | app_ui                                                                                               ✔ |          5 | app_ui
+    #> ⠏ |          0 | data-manager                                                                                         ⠦ |          7 | data-manager                                                                                         ⠹ |         13 | data-manager                                                                                         ✔ |         15 | data-manager
     #> ⠏ |          0 | data                                                                                                 ⠏ |         10 | data                                                                                                 ✔ |         16 | data
-    #> ⠏ |          0 | fct_charts                                                                                           ⠙ |          2 | fct_charts                                                                                           ⠼ |          5 | fct_charts                                                                                           ⠧ |          8 | fct_charts                                                                                           ✔ |          8 | fct_charts
-    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠧ |          8 | fct_value_boxes                                                                                      ⠙ |         12 | fct_value_boxes                                                                                      ⠦ |         17 | fct_value_boxes                                                                                      ⠹ |         23 | fct_value_boxes                                                                                      ⠧ |         28 | fct_value_boxes                                                                                      ⠸ |         34 | fct_value_boxes                                                                                      ✔ |         40 | fct_value_boxes
-    #> ⠏ |          0 | formatting-functions                                                                                 ⠇ |          9 | formatting-functions                                                                                 ⠦ |         17 | formatting-functions                                                                                 ⠸ |         24 | formatting-functions                                                                                 ⠸ |         34 | formatting-functions                                                                                 ⠹ |         43 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
-    #> ⠏ |          0 | kpi-calculations                                                                                     ⠼ |          5 | kpi-calculations                                                                                     ⠋ |         11 | kpi-calculations                                                                                     ⠧ |         18 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
-    #> ⠏ |          0 | mod_dashboard                                                                                        ⠋ |          1 | mod_dashboard                                                                                        ⠹ |          3 | mod_dashboard                                                                                        ⠦ |          7 | mod_dashboard                                                                                        ⠸ |         14 | mod_dashboard                                                                                        ⠼ |         15 | mod_dashboard                                                                                        ⠴ |         16 | mod_dashboard                                                                                        ✔ |         22 | mod_dashboard [3.0s]
-    #> ⠏ |          0 | mod_data_upload                                                                                      ⠹ |          3 | mod_data_upload                                                                                      ⠇ |          9 | mod_data_upload                                                                                      ⠧ |         18 | mod_data_upload                                                                                      ⠇ |         19 | mod_data_upload                                                                                      ⠙ |         22 | mod_data_upload                                                                                      ⠇ |         29 | mod_data_upload                                                                                      ⠏ |         30 | mod_data_upload                                                                                      ✔ |         31 | mod_data_upload [1.6s]
-    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠇ |          9 | mod_kpi_cards                                                                                        ⠧ |         18 | mod_kpi_cards                                                                                        ⠸ |         24 | mod_kpi_cards                                                                                        ⠹ |         33 | mod_kpi_cards                                                                                        ⠦ |         37 | mod_kpi_cards                                                                                        ✔ |         38 | mod_kpi_cards
+    #> ⠏ |          0 | fct_charts                                                                                           ⠹ |          3 | fct_charts                                                                                           ⠼ |          5 | fct_charts                                                                                           ⠧ |          8 | fct_charts                                                                                           ✔ |          8 | fct_charts
+    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠧ |          8 | fct_value_boxes                                                                                      ⠋ |         11 | fct_value_boxes                                                                                      ⠦ |         17 | fct_value_boxes                                                                                      ⠼ |         25 | fct_value_boxes                                                                                      ⠏ |         30 | fct_value_boxes                                                                                      ⠴ |         36 | fct_value_boxes                                                                                      ✔ |         40 | fct_value_boxes
+    #> ⠏ |          0 | formatting-functions                                                                                 ⠋ |         11 | formatting-functions                                                                                 ⠇ |         19 | formatting-functions                                                                                 ⠴ |         26 | formatting-functions                                                                                 ⠦ |         37 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
+    #> ⠏ |          0 | kpi-calculations                                                                                     ⠸ |          4 | kpi-calculations                                                                                     ⠋ |         11 | kpi-calculations                                                                                     ⠧ |         18 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
+    #> ⠏ |          0 | mod_dashboard                                                                                        ⠋ |          1 | mod_dashboard                                                                                        ⠹ |          3 | mod_dashboard                                                                                        ⠦ |          7 | mod_dashboard                                                                                        ⠸ |         14 | mod_dashboard                                                                                        ⠼ |         15 | mod_dashboard                                                                                        ⠴ |         16 | mod_dashboard                                                                                        ✔ |         22 | mod_dashboard [2.7s]
+    #> ⠏ |          0 | mod_data_upload                                                                                      ⠙ |          2 | mod_data_upload                                                                                      ⠏ |         10 | mod_data_upload                                                                                      ⠧ |         18 | mod_data_upload                                                                                      ⠇ |         19 | mod_data_upload                                                                                      ⠙ |         22 | mod_data_upload                                                                                      ⠇ |         29 | mod_data_upload                                                                                      ⠏ |         30 | mod_data_upload                                                                                      ✔ |         31 | mod_data_upload [1.4s]
+    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠇ |          9 | mod_kpi_cards                                                                                        ⠏ |         20 | mod_kpi_cards                                                                                        ⠇ |         29 | mod_kpi_cards                                                                                        ⠼ |         35 | mod_kpi_cards                                                                                        ✔ |         38 | mod_kpi_cards
     #> ⠏ |          0 | run_app                                                                                              ✔ |          4 | run_app
-    #> ⠏ |          0 | utils_charts                                                                                         ⠏ |         10 | utils_charts                                                                                         ⠧ |         18 | utils_charts                                                                                         ✔ |         23 | utils_charts
+    #> ⠏ |          0 | utils_charts                                                                                         ⠏ |         10 | utils_charts                                                                                         ⠇ |         19 | utils_charts                                                                                         ✔ |         23 | utils_charts
     #> 
     #> ══ Results ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
-    #> Duration: 9.1 s
+    #> Duration: 8.0 s
     #> 
     #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 276 ]
-    #> **Tests**: All tests passing ✅
-    #> **Coverage**: See CI badges for coverage status
-    #> **CI Status**: See badges above for current build status
-    #> **Issues**: Check [GitHub Issues](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues)
+    #> Tests: All tests passing ✅
+    #> Coverage: See CI badges for coverage status
+    #> CI Status: See badges above for current build status
 
 ### Package Coverage
 
 ``` r
 covr::package_coverage()
-#> susneoEnergyDashboard Coverage: 92.37%
+#> susneoEnergyDashboard Coverage: 91.76%
+#> R/utils_charts.R: 70.83%
 #> R/mod_data_upload.R: 80.00%
 #> R/mod_kpi_cards.R: 81.25%
 #> R/class_data_manager.R: 84.17%
-#> R/mod_dashboard.R: 97.45%
+#> R/mod_dashboard.R: 97.50%
 #> R/fct_value_boxes.R: 98.46%
 #> R/app_config.R: 100.00%
 #> R/app_server.R: 100.00%
 #> R/app_ui.R: 100.00%
 #> R/fct_charts.R: 100.00%
 #> R/run_app.R: 100.00%
-#> R/utils_charts.R: 100.00%
 #> R/utils_formatting.R: 100.00%
 ```
 
 ### Recent Updates
 
-- ✅ Comprehensive test suite with 240+ tests
-- ✅ Enhanced module test coverage (dashboard, KPI cards, data upload)
-- ✅ CI/CD pipeline with multi-platform testing
-- ✅ Code coverage tracking
-- ✅ Automated linting and code quality checks
-- ✅ Documentation with pkgdown
-- ✅ Sample data and example usage
-- ✅ Resolved namespace conflicts and import issues
+- Comprehensive test suite with 240+ tests
+- Enhanced module test coverage (dashboard, KPI cards, data upload)
+- CI/CD pipeline with multi-platform testing
+- Code coverage tracking
+- Automated linting and code quality checks
+- Documentation with pkgdown
+- Sample data and example usage
+- Resolved namespace conflicts and import issues
 
 ### Known Issues
 
-- 📝 Check [Issues
+- Check [Issues
   page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues)
   for current status
 

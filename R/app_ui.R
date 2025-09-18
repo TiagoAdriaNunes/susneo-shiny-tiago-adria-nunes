@@ -8,6 +8,19 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
+    # Set global Highcharts options for number formatting
+    shiny::tags$script(htmlwidgets::JS("
+      Highcharts.setOptions({
+        lang: {
+          thousandsSep: ','
+        }
+      });
+    ")),
+    # Set global date picker locale to US format
+    shiny::tags$script("
+      $.fn.datepicker.defaults.format = 'mm/dd/yyyy';
+      $.fn.datepicker.defaults.language = 'en';
+    "),
     # Enable busy indicators
     useBusyIndicators(spinners = TRUE, pulse = TRUE, fade = TRUE),
     # Your application UI logic
