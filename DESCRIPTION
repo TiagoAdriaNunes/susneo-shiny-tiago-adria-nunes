@@ -1,0 +1,40 @@
+Package: susneoEnergyDashboard
+Title: SUSNEO Energy Dashboard
+Version: 0.0.0.9008
+Depends: R (>= 4.1.0)
+Authors@R: 
+    person(given = "Tiago",
+           family = "Adria Nunes",
+           role = c("aut", "cre"),
+           email = "tiagoadrianunes@gmail.com")
+Description: Susneo Shiny App.
+License: MIT + file LICENSE
+Imports:
+    bsicons (>= 0.1.2),
+    bslib,
+    config,
+    dplyr,
+    DT,
+    golem,
+    highcharter,
+    htmlwidgets,
+    lubridate,
+    R6,
+    shiny,
+    utils,
+    zoo
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
+Suggests:
+    covr,
+    devtools,
+    here,
+    knitr,
+    lintr,
+    rmarkdown,
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Config/testthat/load-all: list(export_all = FALSE, helpers = FALSE)
+Language: en-US
