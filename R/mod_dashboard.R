@@ -79,7 +79,7 @@ mod_dashboard_ui <- function(id) {
 #'
 #' @param data_manager Data manager instance from data upload module
 #' @noRd
-#' @importFrom shiny moduleServer reactive observe updateSelectizeInput
+#' @importFrom shiny moduleServer reactive observe updateSelectizeInput debounce
 #' @importFrom shiny updateDateRangeInput renderUI observeEvent showNotification isolate
 #' @importFrom DT renderDataTable datatable
 #' @importFrom highcharter renderHighchart hchart hc_add_series hc_title hc_xAxis hc_yAxis
@@ -136,35 +136,52 @@ mod_dashboard_server <- function(id, data_manager) {
 
     filtered_data <- reactive({
       req(data_manager$is_data_loaded())
+      req(input$date_range)
+
+      # Ensure we have valid date range
+      if (is.null(input$date_range) || length(input$date_range) != 2) {
+        return(data.frame())
+      }
 
       data_manager$apply_filters(
         date_range = input$date_range,
         facilities = input$facilities,
         energy_types = input$energy_types
       )
-    })
+    }) |> debounce(500) # 500ms delay to prevent rapid re-rendering
 
     # KPI Cards submodule
     mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
 
-    # Charts using extracted functions
+    # Charts using extracted functions with validation
     output$time_series_plot <- highcharter::renderHighchart({
       data <- filtered_data()
+      req(data)
+      req(nrow(data) > 0)
+
       create_time_series_chart(data, data_manager)
     })
 
     output$facility_comparison <- highcharter::renderHighchart({
       data <- filtered_data()
+      req(data)
+      req(nrow(data) > 0)
+
       create_facility_chart(data, data_manager)
     })
 
     output$data_table <- DT::renderDataTable({
       data <- filtered_data()
+      req(data)
+
       if (nrow(data) == 0) {
-        return(data.frame())
+        return(DT::datatable(data.frame("No data available" = character(0)),
+          rownames = FALSE, options = list(dom = "t")
+        ))
       }
 
       summary_data <- data_manager$prepare_summary_data(data)
+      req(summary_data)
 
       DT::datatable(summary_data,
         rownames = FALSE,

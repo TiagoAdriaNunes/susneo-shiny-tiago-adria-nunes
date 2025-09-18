@@ -2,7 +2,7 @@ test_that("mod_data_upload_server loads data correctly", {
   # Test loading package data directly
   sample_data_function <- function() {
     tryCatch({
-      data("sample_data", package = "susneo", envir = environment())
+      data("sample_data", package = "susneoEnergyDashboard", envir = environment())
       sample_data
     }, error = function(e) {
       warning("Could not load sample_data: ", e$message)

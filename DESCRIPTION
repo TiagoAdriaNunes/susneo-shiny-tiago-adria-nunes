@@ -1,6 +1,6 @@
-Package: susneo
-Title: Susneo Shiny App
-Version: 0.0.0.9000
+Package: susneoEnergyDashboard
+Title: SUSNEO Energy Dashboard
+Version: 0.0.0.9007
 Authors@R: 
     person(given = "firstname",
            family = "lastname",

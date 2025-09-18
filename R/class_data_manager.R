@@ -27,7 +27,7 @@ data_manager <- R6::R6Class(
       tryCatch(
         {
           # Load sample_data from package data
-          data("sample_data", package = "susneo", envir = environment())
+          data("sample_data", package = "susneoEnergyDashboard", envir = environment())
           self$raw_data(sample_data)
           self$process_data()
           return(TRUE)

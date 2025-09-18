@@ -8,6 +8,8 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
+    # Enable busy indicators
+    useBusyIndicators(spinners = TRUE, pulse = TRUE, fade = TRUE),
     # Your application UI logic
     mod_dashboard_ui("energy_dashboard")
   )
@@ -31,7 +33,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "susneo"
+      app_title = "SUSNEO Energy Dashboard"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
