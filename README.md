@@ -13,11 +13,18 @@
 [![R-CMD-check](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/R-CMD-check/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
 <!-- badges: end -->
 
+## Live Demo
+
+**Try the live application**:
+<https://tiagoadrianunes.shinyapps.io/susneo-shiny-app/>
+
 ## Overview
 
-SUSNEO is an interactive energy dashboard built with R Shiny that
-provides comprehensive analysis and visualization of energy consumption
-data. The application features:
+SUSNEO Energy Dashboard is an interactive energy dashboard built with R
+Shiny that provides comprehensive analysis and visualization of energy
+consumption data.
+
+The application features:
 
 - **Interactive Charts**: Time series, facility comparisons, and energy
   type distributions
@@ -45,25 +52,13 @@ if (!require(pak)) install.packages("pak")
 pak::pak("TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes")
 ```
 
-### Install Dependencies
-
-The package will automatically install required dependencies:
-
-``` r
-# Core dependencies
-install.packages(c(
-  "shiny", "bslib", "bsicons", "DT", "highcharter",
-  "dplyr", "lubridate", "R6", "htmlwidgets"
-))
-```
-
 ## Quick Start
 
 ### Launch the Application
 
 ``` r
 # Load the package
-library(susneo)
+library(susneoEnergyDashboard)
 
 # Run the Shiny application
 run_app()
@@ -76,7 +71,7 @@ demonstration:
 
 ``` r
 # Access sample data
-data("sample_data", package = "susneo")
+data("sample_data", package = "susneoEnergyDashboard")
 head(sample_data)
 ```
 
@@ -126,7 +121,7 @@ Your CSV files should include these columns:
 
 ``` r
 # Start the application
-susneo::run_app()
+susneoEnergyDashboard::run_app()
 
 # The app will open in your default browser
 # Use "Load Sample Data" to see the demo
@@ -198,25 +193,25 @@ This project is licensed under the MIT License.
 
 ## Version Info
 
-**Version**: 0.0.0.9000 **Compiled**: 2025-09-17 21:15:15.63536
+**Version**: 0.0.0.9007 **Compiled**: 2025-09-17 22:27:26.160718
 
 ## Development Status
 
     #> **Package**: Development version loaded ✅
     #> ✔ | F W  S  OK | Context
     #> ⠏ |          0 | app_config                                                                                           ✔ |          5 | app_config
-    #> ⠏ |          0 | app_server                                                                                           ✔ |          3 | app_server
+    #> ⠏ |          0 | app_server                                                                                           ⠹ |          3 | app_server                                                                                           ✔ |          3 | app_server
     #> ⠏ |          0 | app_ui                                                                                               ⠋ |          1 | app_ui                                                                                               ✔ |          5 | app_ui
-    #> ⠏ |          0 | data-manager                                                                                         ⠦ |          7 | data-manager                                                                                         ⠹ |         13 | data-manager                                                                                         ✔ |         15 | data-manager
-    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠦ |          7 | fct_value_boxes                                                                                      ⠋ |         11 | fct_value_boxes                                                                                      ⠦ |         17 | fct_value_boxes                                                                                      ✔ |         21 | fct_value_boxes
-    #> ⠏ |          0 | formatting-functions                                                                                 ⠇ |          9 | formatting-functions                                                                                 ⠦ |         17 | formatting-functions                                                                                 ⠼ |         25 | formatting-functions                                                                                 ⠸ |         34 | formatting-functions                                                                                 ⠋ |         41 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
-    #> ⠏ |          0 | kpi-calculations                                                                                     ⠦ |          7 | kpi-calculations                                                                                     ⠸ |         14 | kpi-calculations                                                                                     ⠋ |         21 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
-    #> ⠏ |          0 | mod_data_upload                                                                                      ⠋ |          1 | mod_data_upload                                                                                      ⠧ |          8 | mod_data_upload                                                                                      ✔ |         17 | mod_data_upload
-    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠦ |          7 | mod_kpi_cards                                                                                        ⠼ |         15 | mod_kpi_cards                                                                                        ⠙ |         22 | mod_kpi_cards                                                                                        ✔ |         30 | mod_kpi_cards
+    #> ⠏ |          0 | data-manager                                                                                         ⠼ |          5 | data-manager                                                                                         ⠏ |         10 | data-manager                                                                                         ⠼ |         15 | data-manager                                                                                         ✔ |         15 | data-manager
+    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠦ |          7 | fct_value_boxes                                                                                      ⠋ |         11 | fct_value_boxes                                                                                      ⠼ |         15 | fct_value_boxes                                                                                      ⠦ |         17 | fct_value_boxes                                                                                      ✔ |         21 | fct_value_boxes
+    #> ⠏ |          0 | formatting-functions                                                                                 ⠇ |          9 | formatting-functions                                                                                 ⠧ |         18 | formatting-functions                                                                                 ⠴ |         26 | formatting-functions                                                                                 ⠦ |         37 | formatting-functions                                                                                 ⠹ |         43 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
+    #> ⠏ |          0 | kpi-calculations                                                                                     ⠴ |          6 | kpi-calculations                                                                                     ⠙ |         12 | kpi-calculations                                                                                     ⠋ |         21 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
+    #> ⠏ |          0 | mod_data_upload                                                                                      ⠋ |          1 | mod_data_upload                                                                                      ⠧ |          8 | mod_data_upload                                                                                      ⠴ |         16 | mod_data_upload                                                                                      ✔ |         17 | mod_data_upload
+    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠧ |          8 | mod_kpi_cards                                                                                        ⠼ |         15 | mod_kpi_cards                                                                                        ⠙ |         22 | mod_kpi_cards                                                                                        ⠏ |         30 | mod_kpi_cards                                                                                        ✔ |         30 | mod_kpi_cards
     #> ⠏ |          0 | run_app                                                                                              ✔ |          4 | run_app
     #> 
     #> ══ Results ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
-    #> Duration: 2.9 s
+    #> Duration: 3.5 s
     #> 
     #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 166 ]
     #> **Tests**: All tests passing ✅
@@ -228,13 +223,13 @@ This project is licensed under the MIT License.
 
 ``` r
 covr::package_coverage()
-#> susneo Coverage: 44.41%
+#> susneoEnergyDashboard Coverage: 43.78%
 #> R/fct_charts.R: 0.00%
 #> R/utils_charts.R: 0.00%
 #> R/fct_value_boxes.R: 23.08%
 #> R/mod_kpi_cards.R: 48.44%
+#> R/mod_dashboard.R: 50.32%
 #> R/mod_data_upload.R: 52.00%
-#> R/mod_dashboard.R: 53.79%
 #> R/class_data_manager.R: 55.00%
 #> R/app_config.R: 100.00%
 #> R/app_server.R: 100.00%
@@ -245,7 +240,7 @@ covr::package_coverage()
 
 ### Recent Updates
 
-- ✅ Comprehensive test suite with 170+ tests
+- ✅ Comprehensive test suite with 160+ tests
 - ✅ CI/CD pipeline with multi-platform testing
 - ✅ Code coverage tracking
 - ✅ Automated linting and code quality checks

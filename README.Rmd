@@ -23,9 +23,15 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/R-CMD-check/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
 <!-- badges: end -->
 
+## Live Demo
+
+**Try the live application**: [https://tiagoadrianunes.shinyapps.io/susneo-shiny-app/](https://tiagoadrianunes.shinyapps.io/susneo-shiny-app/)
+
 ## Overview
 
-SUSNEO is an interactive energy dashboard built with R Shiny that provides comprehensive analysis and visualization of energy consumption data. The application features:
+SUSNEO Energy Dashboard is an interactive energy dashboard built with R Shiny that provides comprehensive analysis and visualization of energy consumption data.
+
+The application features:
 
 - **Interactive Charts**: Time series, facility comparisons, and energy type distributions
 - **KPI Metrics**: Real-time calculation of consumption, emissions, and efficiency ratios
@@ -51,17 +57,6 @@ if (!require(pak)) install.packages("pak")
 pak::pak("TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes")
 ```
 
-### Install Dependencies
-
-The package will automatically install required dependencies:
-
-```{r, eval = FALSE}
-# Core dependencies
-install.packages(c(
-  "shiny", "bslib", "bsicons", "DT", "highcharter",
-  "dplyr", "lubridate", "R6", "htmlwidgets"
-))
-```
 
 ## Quick Start
 
@@ -69,7 +64,7 @@ install.packages(c(
 
 ```{r, eval = FALSE}
 # Load the package
-library(susneo)
+library(susneoEnergyDashboard)
 
 # Run the Shiny application
 run_app()
@@ -81,7 +76,7 @@ The application includes sample energy consumption data for demonstration:
 
 ```{r, eval = FALSE}
 # Access sample data
-data("sample_data", package = "susneo")
+data("sample_data", package = "susneoEnergyDashboard")
 head(sample_data)
 ```
 
@@ -125,7 +120,7 @@ Your CSV files should include these columns:
 
 ```{r, eval = FALSE}
 # Start the application
-susneo::run_app()
+susneoEnergyDashboard::run_app()
 
 # The app will open in your default browser
 # Use "Load Sample Data" to see the demo
@@ -268,7 +263,7 @@ covr::package_coverage()
 
 ### Recent Updates
 
-- ✅ Comprehensive test suite with 170+ tests
+- ✅ Comprehensive test suite with 160+ tests
 - ✅ CI/CD pipeline with multi-platform testing
 - ✅ Code coverage tracking
 - ✅ Automated linting and code quality checks

@@ -4,9 +4,11 @@ test_that("app_server function exists and is callable", {
 
   # Test that it can be called with mock session
   expect_no_error({
-    shiny::testServer(app_server, {
-      # Basic test that server function runs without error
-      expect_true(TRUE)
-    })
+    suppressWarnings({
+      shiny::testServer(app_server, {
+        # Basic test that server function runs without error
+        expect_true(TRUE)
+      })
+    }, classes = "packageStartupMessage")
   })
 })
