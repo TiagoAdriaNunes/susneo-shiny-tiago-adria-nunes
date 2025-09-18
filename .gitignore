@@ -47,3 +47,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# README HTML output (generated from README.Rmd)
+README.html

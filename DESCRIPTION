@@ -2,12 +2,12 @@ Package: susneoEnergyDashboard
 Title: SUSNEO Energy Dashboard
 Version: 0.0.0.9007
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
+    person(given = "Tiago",
+           family = "Adria Nunes",
            role = c("aut", "cre"),
-           email = "tiago.adria@gmail.com")
+           email = "tiagoadrianunes@gmail.com")
 Description: Susneo Shiny App.
-License: MIT
+License: MIT + file LICENSE
 Imports:
     bsicons,
     bslib,
@@ -18,7 +18,6 @@ Imports:
     highcharter,
     htmlwidgets,
     lubridate,
-    pkgload,
     R6,
     shiny,
     utils,
