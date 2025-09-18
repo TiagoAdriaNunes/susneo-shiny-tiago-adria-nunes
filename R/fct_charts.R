@@ -19,7 +19,8 @@ create_time_series_chart <- function(data, data_manager) {
   daily_data <- data_manager$prepare_time_series_data(data)
 
   highcharter::hchart(
-    daily_data, "line",
+    daily_data,
+    "line",
     highcharter::hcaes(x = date, y = total_value),
     name = "Daily Consumption"
   ) |>
@@ -35,12 +36,15 @@ create_time_series_chart <- function(data, data_manager) {
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
-      formatter = htmlwidgets::JS("function() {
+      formatter = htmlwidgets::JS(
+        "function() {
         return '<b>' + Highcharts.dateFormat('%A, %B %e, %Y', this.x) + '</b><br>' +
                'Energy: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
-      }")
+      }"
+      )
     ) |>
-    highcharter::hc_colors(c("#2E86AB"))
+    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_size(height = 400)
 }
 
 #' Create facility comparison column chart
@@ -60,7 +64,8 @@ create_facility_chart <- function(data, data_manager) {
   facility_data <- data_manager$prepare_facility_data(data)
 
   highcharter::hchart(
-    facility_data, "column",
+    facility_data,
+    "column",
     highcharter::hcaes(x = site, y = total_value)
   ) |>
     highcharter::hc_title(text = "Total Energy Consumption by Facility") |>
@@ -75,12 +80,15 @@ create_facility_chart <- function(data, data_manager) {
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
-      formatter = htmlwidgets::JS("function() {
+      formatter = htmlwidgets::JS(
+        "function() {
         return '<b>' + this.point.name + '</b><br>' +
                'Total: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
-      }")
+      }"
+      )
     ) |>
-    highcharter::hc_colors(c("#2E86AB"))
+    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_size(height = 400)
 }
 
 #' Create energy type distribution pie chart
@@ -100,23 +108,36 @@ create_energy_type_chart <- function(data, data_manager) {
 
   type_data <- data |>
     dplyr::group_by(type) |>
-    dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
+    dplyr::summarise(
+      total_value = sum(value, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
     dplyr::arrange(dplyr::desc(total_value))
 
   highcharter::hchart(
-    type_data, "pie",
+    type_data,
+    "pie",
     highcharter::hcaes(x = type, y = total_value)
   ) |>
     highcharter::hc_title(text = "Energy Consumption by Type") |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
-      formatter = htmlwidgets::JS("function() {
+      formatter = htmlwidgets::JS(
+        "function() {
         return '<b>' + this.point.name + '</b><br>' +
                'Total: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units<br>' +
                'Percentage: ' + Highcharts.numberFormat(this.percentage, 1) + '%';
-      }")
+      }"
+      )
     ) |>
-    highcharter::hc_colors(c("#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#593E2C"))
+    highcharter::hc_colors(c(
+      "#007bc2",
+      "#007bc2",
+      "#007bc2",
+      "#007bc2",
+      "#007bc2"
+    )) |>
+    highcharter::hc_size(height = 400)
 }
 
 #' Create trend analysis chart
@@ -144,7 +165,8 @@ create_trend_chart <- function(data, data_manager) {
     )
 
   highcharter::hchart(
-    daily_data, "line",
+    daily_data,
+    "line",
     highcharter::hcaes(x = date, y = total_value),
     name = "Trend Analysis"
   ) |>
@@ -160,10 +182,13 @@ create_trend_chart <- function(data, data_manager) {
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
-      formatter = htmlwidgets::JS("function() {
+      formatter = htmlwidgets::JS(
+        "function() {
         return '<b>' + Highcharts.dateFormat('%A, %B %e, %Y', this.x) + '</b><br>' +
                'Energy: ' + Highcharts.numberFormat(this.y, 0, '.', ',') + ' units';
-      }")
+      }"
+      )
     ) |>
-    highcharter::hc_colors(c("#2E86AB"))
+    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_size(height = 400)
 }

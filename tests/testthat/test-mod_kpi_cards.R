@@ -43,26 +43,29 @@ test_that("mod_kpi_cards_extended_ui has correct layout structure", {
   expect_true(inherits(ui_result, "shiny.tag.list"))
   expect_equal(length(ui_result), 2)
 
-  # Check that each element in the tagList is a bslib-layout-columns
-  expect_true(all(sapply(ui_result, function(x) x$name == "bslib-layout-columns")))
+  # Check that each element in the tagList is a div with bslib_fragment class
+  expect_true(all(sapply(ui_result, function(x) {
+    x$name == "div" && "bslib_fragment" %in% class(x)
+  })))
 
   # Check that each layout has children (bslib creates 5 children including grid spacing)
-  expect_true(length(ui_result[[1]]$children) > 0)  # First row has children
-  expect_true(length(ui_result[[2]]$children) > 0)  # Second row has children
+  expect_true(length(ui_result[[1]]$children) > 0) # First row has children
+  expect_true(length(ui_result[[2]]$children) > 0) # Second row has children
 
   # Check that we have the expected number of uiOutput elements in the HTML
   ui_html <- as.character(ui_result)
   uiOutput_count <- length(gregexpr('class="shiny-html-output"', ui_html)[[1]])
-  expect_equal(uiOutput_count, 6)  # 6 KPI boxes total
+  expect_equal(uiOutput_count, 6) # 6 KPI boxes total
 })
 
 test_that("mod_kpi_cards_ui creates correct basic UI structure", {
   # Test the basic UI function
   ui_result <- mod_kpi_cards_ui("basic_kpi")
 
-  # Check that it returns a single bslib-layout-columns element
+  # Check that it returns a single div element with bslib_fragment class
   expect_true(inherits(ui_result, "shiny.tag"))
-  expect_equal(ui_result$name, "bslib-layout-columns")
+  expect_equal(ui_result$name, "div")
+  expect_true("bslib_fragment" %in% class(ui_result))
 
   # Check that it has children (bslib creates 5 children including grid spacing)
   expect_true(length(ui_result$children) > 0)
@@ -100,13 +103,17 @@ test_that("mod_kpi_cards_server works with valid data", {
   })
 
   expect_no_error({
-    testServer(mod_kpi_cards_server, args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ), {
-      # Server should handle the data without errors
-      expect_true(TRUE)
-    })
+    testServer(
+      mod_kpi_cards_server,
+      args = list(
+        data_manager = dm,
+        filtered_data = filtered_data
+      ),
+      {
+        # Server should handle the data without errors
+        expect_true(TRUE)
+      }
+    )
   })
 })
 
@@ -124,13 +131,17 @@ test_that("mod_kpi_cards_extended_server works with valid data", {
   })
 
   expect_no_error({
-    testServer(mod_kpi_cards_extended_server, args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ), {
-      # Server should handle the data without errors
-      expect_true(TRUE)
-    })
+    testServer(
+      mod_kpi_cards_extended_server,
+      args = list(
+        data_manager = dm,
+        filtered_data = filtered_data
+      ),
+      {
+        # Server should handle the data without errors
+        expect_true(TRUE)
+      }
+    )
   })
 })
 
@@ -141,13 +152,17 @@ test_that("mod_kpi_cards_server handles empty data", {
   })
 
   expect_no_error({
-    testServer(mod_kpi_cards_server, args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ), {
-      # Should handle empty data gracefully
-      expect_true(TRUE)
-    })
+    testServer(
+      mod_kpi_cards_server,
+      args = list(
+        data_manager = dm,
+        filtered_data = filtered_data
+      ),
+      {
+        # Should handle empty data gracefully
+        expect_true(TRUE)
+      }
+    )
   })
 })
 
@@ -158,12 +173,16 @@ test_that("mod_kpi_cards_extended_server handles empty data", {
   })
 
   expect_no_error({
-    testServer(mod_kpi_cards_extended_server, args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ), {
-      # Should handle empty data gracefully
-      expect_true(TRUE)
-    })
+    testServer(
+      mod_kpi_cards_extended_server,
+      args = list(
+        data_manager = dm,
+        filtered_data = filtered_data
+      ),
+      {
+        # Should handle empty data gracefully
+        expect_true(TRUE)
+      }
+    )
   })
 })

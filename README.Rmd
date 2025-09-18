@@ -256,7 +256,6 @@ covr::package_coverage()
 ```
 
 ### Recent Updates
-
 - Comprehensive test suite with 240+ tests
 - Enhanced module test coverage (dashboard, KPI cards, data upload)
 - CI/CD pipeline with multi-platform testing
@@ -265,6 +264,7 @@ covr::package_coverage()
 - Documentation with pkgdown
 - Sample data and example usage
 - Resolved namespace conflicts and import issues
+- Adjusted the Value Boxes.
 
 ### Known Issues
 

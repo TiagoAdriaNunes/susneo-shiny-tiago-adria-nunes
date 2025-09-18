@@ -7,13 +7,15 @@
 #' @return JS configuration for global Highcharts options
 #' @noRd
 set_global_chart_options <- function() {
-  htmlwidgets::JS("
+  htmlwidgets::JS(
+    "
     Highcharts.setOptions({
       lang: {
         thousandsSep: ','
       }
     });
-  ")
+  "
+  )
 }
 
 #' Get standard chart colors
@@ -21,7 +23,7 @@ set_global_chart_options <- function() {
 #' @return Vector of hex color codes for charts
 #' @noRd
 get_chart_colors <- function() {
-  c("#2E86AB")
+  c("#007bc2")
 }
 
 #' Get primary chart color
@@ -29,7 +31,7 @@ get_chart_colors <- function() {
 #' @return Primary blue color hex code
 #' @noRd
 get_primary_color <- function() {
-  "#2E86AB"
+  "#007bc2"
 }
 
 #' Get JavaScript formatter for number formatting in charts
@@ -39,7 +41,9 @@ get_primary_color <- function() {
 #' @importFrom htmlwidgets JS
 #' @noRd
 get_chart_formatter_js <- function() {
-  htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }")
+  htmlwidgets::JS(
+    "function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"
+  )
 }
 
 #' Create empty chart with no data message
@@ -52,7 +56,8 @@ get_chart_formatter_js <- function() {
 #' @noRd
 create_empty_chart <- function(title = "No data available") {
   highcharter::highchart() |>
-    highcharter::hc_title(text = title)
+    highcharter::hc_title(text = title) |>
+    highcharter::hc_size(height = 400)
 }
 
 #' Get standard chart tooltip configuration
@@ -92,7 +97,13 @@ get_chart_axis_config <- function(title, formatter_js = NULL) {
 #'
 #' @return List with complete chart configuration
 #' @noRd
-get_standard_chart_config <- function(title, x_axis_title, y_axis_title, tooltip_format, color = NULL) {
+get_standard_chart_config <- function(
+  title,
+  x_axis_title,
+  y_axis_title,
+  tooltip_format,
+  color = NULL
+) {
   list(
     title = title,
     x_axis = get_chart_axis_config(x_axis_title),
