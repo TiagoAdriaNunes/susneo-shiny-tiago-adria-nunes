@@ -1,5 +1,4 @@
 ---
-title: "SUSNEO Energy Dashboard"
 output: github_document
 ---
 
@@ -20,7 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CI](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/CI/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
-[![Codecov test coverage](https://codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/graph/badge.svg)](https://app.codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes)
+[![codecov](https://codecov.io/github/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/graph/badge.svg?token=C76NX21FLR)](https://codecov.io/github/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes)
 [![R-CMD-check](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/R-CMD-check/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
 <!-- badges: end -->
 

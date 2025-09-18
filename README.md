@@ -1,5 +1,3 @@
-SUSNEO Energy Dashboard
-================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -11,8 +9,7 @@ SUSNEO Energy Dashboard
 <!-- badges: start -->
 
 [![CI](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/CI/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/graph/badge.svg)](https://app.codecov.io/gh/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes)
+[![codecov](https://codecov.io/github/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/graph/badge.svg?token=C76NX21FLR)](https://codecov.io/github/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes)
 [![R-CMD-check](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/workflows/R-CMD-check/badge.svg)](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/actions)
 <!-- badges: end -->
 
@@ -201,29 +198,27 @@ This project is licensed under the MIT License.
 
 ## Version Info
 
-**Version**: 0.0.0.9000 **Compiled**: 2025-09-17 20:41:24.908783
+**Version**: 0.0.0.9000 **Compiled**: 2025-09-17 21:15:15.63536
 
 ## Development Status
 
     #> **Package**: Development version loaded ✅
     #> ✔ | F W  S  OK | Context
     #> ⠏ |          0 | app_config                                                                                           ✔ |          5 | app_config
-    #> ⠏ |          0 | app_server                                                                                           ⠙ |          2 | app_server                                                                                           ✔ |          3 | app_server
+    #> ⠏ |          0 | app_server                                                                                           ✔ |          3 | app_server
     #> ⠏ |          0 | app_ui                                                                                               ⠋ |          1 | app_ui                                                                                               ✔ |          5 | app_ui
-    #> ⠏ |          0 | data-manager                                                                                         ⠧ |          8 | data-manager                                                                                         ⠹ |         13 | data-manager                                                                                         ✔ |         15 | data-manager
-    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠇ |          9 | fct_value_boxes                                                                                      ⠼ |         15 | fct_value_boxes                                                                                      ✔ |         21 | fct_value_boxes
-    #> ⠏ |          0 | formatting-functions                                                                                 ⠇ |          9 | formatting-functions                                                                                 ⠴ |         16 | formatting-functions                                                                                 ⠼ |         25 | formatting-functions                                                                                 ⠼ |         35 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
-    #> ⠏ |          0 | kpi-calculations                                                                                     ⠴ |          6 | kpi-calculations                                                                                     ⠙ |         12 | kpi-calculations                                                                                     ⠇ |         19 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
-    #> ⠏ |          0 | mod_data_upload                                                                                      ⠸ |          4 | mod_data_upload                                                                                      ⠋ |         11 | mod_data_upload                                                                                      ✔ |         17 | mod_data_upload
-    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠧ |          8 | mod_kpi_cards                                                                                        ⠸ |         14 | mod_kpi_cards                                                                                        ⠋ |         21 | mod_kpi_cards                                                                                        ✔ |         30 | mod_kpi_cards
+    #> ⠏ |          0 | data-manager                                                                                         ⠦ |          7 | data-manager                                                                                         ⠹ |         13 | data-manager                                                                                         ✔ |         15 | data-manager
+    #> ⠏ |          0 | fct_value_boxes                                                                                      ⠦ |          7 | fct_value_boxes                                                                                      ⠋ |         11 | fct_value_boxes                                                                                      ⠦ |         17 | fct_value_boxes                                                                                      ✔ |         21 | fct_value_boxes
+    #> ⠏ |          0 | formatting-functions                                                                                 ⠇ |          9 | formatting-functions                                                                                 ⠦ |         17 | formatting-functions                                                                                 ⠼ |         25 | formatting-functions                                                                                 ⠸ |         34 | formatting-functions                                                                                 ⠋ |         41 | formatting-functions                                                                                 ✔ |         44 | formatting-functions
+    #> ⠏ |          0 | kpi-calculations                                                                                     ⠦ |          7 | kpi-calculations                                                                                     ⠸ |         14 | kpi-calculations                                                                                     ⠋ |         21 | kpi-calculations                                                                                     ✔ |         22 | kpi-calculations
+    #> ⠏ |          0 | mod_data_upload                                                                                      ⠋ |          1 | mod_data_upload                                                                                      ⠧ |          8 | mod_data_upload                                                                                      ✔ |         17 | mod_data_upload
+    #> ⠏ |          0 | mod_kpi_cards                                                                                        ⠦ |          7 | mod_kpi_cards                                                                                        ⠼ |         15 | mod_kpi_cards                                                                                        ⠙ |         22 | mod_kpi_cards                                                                                        ✔ |         30 | mod_kpi_cards
     #> ⠏ |          0 | run_app                                                                                              ✔ |          4 | run_app
     #> 
     #> ══ Results ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
     #> Duration: 2.9 s
     #> 
     #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 166 ]
-    #> 
-    #> You rock!
     #> **Tests**: All tests passing ✅
     #> **Coverage**: See CI badges for coverage status
     #> **CI Status**: See badges above for current build status
