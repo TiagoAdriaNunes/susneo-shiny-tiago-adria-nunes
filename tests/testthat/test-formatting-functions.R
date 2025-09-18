@@ -104,5 +104,4 @@ test_that("formatting functions handle different numeric types", {
 
   # Test character that can be coerced to numeric
   # Note: This might fail if the function doesn't handle character input
-  # expect_equal(format_number_with_commas(as.character(1234)), "1,234")
 })

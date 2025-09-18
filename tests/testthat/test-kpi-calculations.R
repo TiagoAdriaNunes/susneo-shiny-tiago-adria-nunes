@@ -99,7 +99,8 @@ test_that("data preparation methods work correctly", {
     # Test summary data preparation
     summary_data <- dm$prepare_summary_data(test_data)
     expect_equal(nrow(summary_data), 4) # Four unique site-type combinations
-    expect_true(all(c("site", "type", "total_consumption", "total_emissions", "avg_consumption", "records") %in% names(summary_data)))
+    expect_true(all(c("site", "type", "total_consumption", "total_emissions",
+                      "avg_consumption", "records") %in% names(summary_data)))
   })
 })
 

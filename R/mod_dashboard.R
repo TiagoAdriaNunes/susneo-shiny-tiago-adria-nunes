@@ -79,7 +79,8 @@ mod_dashboard_ui <- function(id) {
 #'
 #' @param data_manager Data manager instance from data upload module
 #' @noRd
-#' @importFrom shiny moduleServer reactive observe updateSelectizeInput updateDateRangeInput renderUI observeEvent showNotification isolate
+#' @importFrom shiny moduleServer reactive observe updateSelectizeInput
+#' @importFrom shiny updateDateRangeInput renderUI observeEvent showNotification isolate
 #' @importFrom DT renderDataTable datatable
 #' @importFrom highcharter renderHighchart hchart hc_add_series hc_title hc_xAxis hc_yAxis
 mod_dashboard_server <- function(id, data_manager) {

@@ -7,7 +7,7 @@
 #' @return Vector of hex color codes for charts
 #' @noRd
 get_chart_colors <- function() {
-  return(c("#2E86AB"))
+  c("#2E86AB")
 }
 
 #' Get primary chart color
@@ -15,7 +15,7 @@ get_chart_colors <- function() {
 #' @return Primary blue color hex code
 #' @noRd
 get_primary_color <- function() {
-  return("#2E86AB")
+  "#2E86AB"
 }
 
 #' Get JavaScript formatter for number formatting in charts
