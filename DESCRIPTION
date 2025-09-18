@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "tiagoadrianunes@gmail.com")
 Description: Susneo Shiny App.
-License: MIT + file LICENSE
+License: MIT
 Imports:
     bsicons,
     bslib,
