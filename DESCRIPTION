@@ -18,6 +18,7 @@ Imports:
     highcharter,
     htmlwidgets,
     lubridate,
+    pkgload,
     R6,
     shiny,
     utils,
