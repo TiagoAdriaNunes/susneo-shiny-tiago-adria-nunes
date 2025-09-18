@@ -271,7 +271,6 @@ covr::package_coverage()
 - Check [Issues page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues) for current status
 
 ### Roadmap
-
 - [ ] Enhanced data visualization options
 - [ ] Export functionality for charts and reports
 - [ ] Advanced filtering and aggregation features

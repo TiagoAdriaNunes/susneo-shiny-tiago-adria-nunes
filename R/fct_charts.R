@@ -27,7 +27,11 @@ create_time_series_chart <- function(data, data_manager) {
     highcharter::hc_xAxis(title = list(text = "Date")) |>
     highcharter::hc_yAxis(
       title = list(text = "Energy Consumption (units)"),
-      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
+      labels = list(
+        formatter = htmlwidgets::JS(
+          "function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"
+        )
+      )
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
@@ -63,7 +67,11 @@ create_facility_chart <- function(data, data_manager) {
     highcharter::hc_xAxis(title = list(text = "Facility")) |>
     highcharter::hc_yAxis(
       title = list(text = "Total Energy Consumption (units)"),
-      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
+      labels = list(
+        formatter = htmlwidgets::JS(
+          "function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"
+        )
+      )
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
@@ -144,7 +152,11 @@ create_trend_chart <- function(data, data_manager) {
     highcharter::hc_xAxis(title = list(text = "Date")) |>
     highcharter::hc_yAxis(
       title = list(text = "Energy Consumption (units)"),
-      labels = list(formatter = htmlwidgets::JS("function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"))
+      labels = list(
+        formatter = htmlwidgets::JS(
+          "function() { return Highcharts.numberFormat(this.value, 0, '.', ','); }"
+        )
+      )
     ) |>
     highcharter::hc_tooltip(
       useHTML = TRUE,
