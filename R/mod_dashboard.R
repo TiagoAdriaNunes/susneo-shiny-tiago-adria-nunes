@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList h1 dateRangeInput updateDateRangeInput selectizeInput actionButton div h3 br
 #' @importFrom DT dataTableOutput
 #' @importFrom highcharter highchartOutput
-#' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns
+#' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns layout_column_wrap
 #' @importFrom bsicons bs_icon
 mod_dashboard_ui <- function(id) {
   ns <- NS(id)
@@ -19,7 +19,8 @@ mod_dashboard_ui <- function(id) {
     sidebar = bslib::sidebar(
       width = 300,
       h3("Filters"),
-      dateRangeInput(ns("date_range"),
+      dateRangeInput(
+        ns("date_range"),
         label = "Date Range",
         start = Sys.Date() - 30,
         end = Sys.Date(),
@@ -27,13 +28,15 @@ mod_dashboard_ui <- function(id) {
         language = "en",
         separator = " to "
       ),
-      selectizeInput(ns("facilities"),
+      selectizeInput(
+        ns("facilities"),
         label = "Facilities",
         choices = NULL,
         multiple = TRUE,
         options = list(placeholder = "Select facilities...")
       ),
-      selectizeInput(ns("energy_types"),
+      selectizeInput(
+        ns("energy_types"),
         label = "Energy Types",
         choices = NULL,
         multiple = TRUE,
@@ -42,27 +45,26 @@ mod_dashboard_ui <- function(id) {
       br(),
       div(
         style = "text-align: right;",
-        actionButton(ns("reset_filters"),
+        actionButton(
+          ns("reset_filters"),
           label = "Reset Filters",
           class = "btn-outline-secondary btn-sm"
         )
       )
     ),
-    bslib::card(
-      bslib::card_header("Key Performance Indicators"),
-      bslib::card_body(
-        mod_kpi_cards_ui(ns("kpi_cards"))
-      )
-    ),
-    bslib::layout_columns(
-      col_widths = c(6, 6),
+    mod_kpi_cards_ui(ns("kpi_cards")),
+    bslib::layout_column_wrap(
+      width = "500px",
+      fill = FALSE,
       bslib::card(
+        full_screen = TRUE,
         bslib::card_header("Energy Consumption Over Time"),
         bslib::card_body(
           highcharter::highchartOutput(ns("time_series_plot"))
         )
       ),
       bslib::card(
+        full_screen = TRUE,
         bslib::card_header("Energy Usage by Facility"),
         bslib::card_body(
           highcharter::highchartOutput(ns("facility_comparison"))
@@ -70,6 +72,8 @@ mod_dashboard_ui <- function(id) {
       )
     ),
     bslib::card(
+      min_height = 400,
+      full_screen = TRUE,
       bslib::card_header("Data Summary"),
       bslib::card_body(
         DT::dataTableOutput(ns("data_table"))
@@ -98,17 +102,23 @@ mod_dashboard_server <- function(id, data_manager) {
         energy_types <- data_manager$get_energy_types()
         date_range <- data_manager$get_date_range()
 
-        updateSelectizeInput(session, "facilities",
+        updateSelectizeInput(
+          session,
+          "facilities",
           choices = facilities,
           selected = NULL
         )
 
-        updateSelectizeInput(session, "energy_types",
+        updateSelectizeInput(
+          session,
+          "energy_types",
           choices = energy_types,
           selected = NULL
         )
 
-        updateDateRangeInput(session, "date_range",
+        updateDateRangeInput(
+          session,
+          "date_range",
           start = date_range[1],
           end = date_range[2],
           min = date_range[1],
@@ -121,7 +131,9 @@ mod_dashboard_server <- function(id, data_manager) {
       if (data_manager$is_data_loaded()) {
         date_range <- data_manager$get_date_range()
 
-        updateDateRangeInput(session, "date_range",
+        updateDateRangeInput(
+          session,
+          "date_range",
           start = date_range[1],
           end = date_range[2]
         )
@@ -151,7 +163,8 @@ mod_dashboard_server <- function(id, data_manager) {
         facilities = input$facilities,
         energy_types = input$energy_types
       )
-    }) |> debounce(500) # 500ms delay to prevent rapid re-rendering
+    }) |>
+      debounce(500) # 500ms delay to prevent rapid re-rendering
 
     # KPI Cards submodule
     mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
@@ -178,15 +191,18 @@ mod_dashboard_server <- function(id, data_manager) {
       req(data)
 
       if (nrow(data) == 0) {
-        return(DT::datatable(data.frame("No data available" = character(0)),
-          rownames = FALSE, options = list(dom = "t")
+        return(DT::datatable(
+          data.frame("No data available" = character(0)),
+          rownames = FALSE,
+          options = list(dom = "t")
         ))
       }
 
       summary_data <- data_manager$prepare_summary_data(data)
       req(summary_data)
 
-      DT::datatable(summary_data,
+      DT::datatable(
+        summary_data,
         rownames = FALSE,
         options = list(
           pageLength = 10,
@@ -196,12 +212,20 @@ mod_dashboard_server <- function(id, data_manager) {
           )
         ),
         colnames = c(
-          "Site", "Energy Type", "Total Consumption",
-          "Total Emissions (kg CO2e)", "Avg. Consumption", "Records"
+          "Site",
+          "Energy Type",
+          "Total Consumption",
+          "Total Emissions (kg CO2e)",
+          "Avg. Consumption",
+          "Records"
         )
       ) |>
         DT::formatCurrency(
-          columns = c("total_consumption", "total_emissions", "avg_consumption"),
+          columns = c(
+            "total_consumption",
+            "total_emissions",
+            "avg_consumption"
+          ),
           currency = "",
           digits = 0,
           mark = ","

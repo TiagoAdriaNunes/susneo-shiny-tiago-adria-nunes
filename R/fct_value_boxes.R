@@ -20,8 +20,7 @@ create_consumption_value_box <- function(data, data_manager) {
     title = "Total Energy Consumption",
     value = total_formatted,
     showcase = bsicons::bs_icon("lightning-charge"),
-    theme = "blue",
-    height = "150px"
+    theme = "blue"
   )
 }
 
@@ -43,8 +42,7 @@ create_emissions_value_box <- function(data, data_manager) {
     title = "Total Carbon Emissions",
     value = total_formatted,
     showcase = bsicons::bs_icon("cloud"),
-    theme = "blue",
-    height = "150px"
+    theme = "blue"
   )
 }
 
@@ -66,8 +64,7 @@ create_usage_value_box <- function(data, data_manager) {
     title = "Average Daily Usage",
     value = avg_formatted,
     showcase = bsicons::bs_icon("calendar3"),
-    theme = "blue",
-    height = "150px"
+    theme = "blue"
   )
 }
 
@@ -98,8 +95,7 @@ create_efficiency_value_box <- function(data, data_manager) {
     title = "Energy Efficiency Ratio",
     value = efficiency_formatted,
     showcase = bsicons::bs_icon("speedometer2"),
-    theme = "success",
-    height = "150px"
+    theme = "success"
   )
 }
 
@@ -127,8 +123,7 @@ create_peak_usage_value_box <- function(data, data_manager) {
     title = "Peak Daily Usage",
     value = peak_formatted,
     showcase = bsicons::bs_icon("graph-up"),
-    theme = "warning",
-    height = "150px"
+    theme = "warning"
   )
 }
 
@@ -153,7 +148,6 @@ create_facilities_value_box <- function(data) {
     title = "Active Facilities",
     value = count_formatted,
     showcase = bsicons::bs_icon("building"),
-    theme = "info",
-    height = "150px"
+    theme = "info"
   )
 }

@@ -7,12 +7,13 @@
 #' @noRd
 #'
 #' @importFrom shiny NS uiOutput
-#' @importFrom bslib layout_columns
+#' @importFrom bslib layout_column_wrap
 mod_kpi_cards_ui <- function(id) {
   ns <- NS(id)
 
-  bslib::layout_columns(
-    col_widths = c(4, 4, 4),
+  bslib::layout_column_wrap(
+    min_width = "280px",
+    fill = FALSE,
     shiny::uiOutput(ns("total_consumption_box")),
     shiny::uiOutput(ns("total_emissions_box")),
     shiny::uiOutput(ns("avg_daily_usage_box"))
@@ -56,22 +57,24 @@ mod_kpi_cards_server <- function(id, data_manager, filtered_data) {
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS uiOutput
-#' @importFrom bslib layout_columns
+#' @importFrom shiny NS uiOutput tagList
+#' @importFrom bslib layout_column_wrap
 mod_kpi_cards_extended_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
-    # First row - primary KPIs
-    bslib::layout_columns(
-      col_widths = c(4, 4, 4),
+    # Primary KPIs
+    bslib::layout_column_wrap(
+      min_width = "280px",
+      fill = FALSE,
       shiny::uiOutput(ns("total_consumption_box")),
       shiny::uiOutput(ns("total_emissions_box")),
       shiny::uiOutput(ns("avg_daily_usage_box"))
     ),
-    # Second row - secondary KPIs
-    bslib::layout_columns(
-      col_widths = c(4, 4, 4),
+    # Secondary KPIs
+    bslib::layout_column_wrap(
+      min_width = "280px",
+      fill = FALSE,
       shiny::uiOutput(ns("peak_usage_box")),
       shiny::uiOutput(ns("efficiency_box")),
       shiny::uiOutput(ns("facilities_count_box"))
