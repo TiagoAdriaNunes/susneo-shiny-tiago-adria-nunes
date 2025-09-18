@@ -205,12 +205,12 @@ This project is licensed under the MIT License.
     #> ⠏ |          0 | data-manager                                                                           ⠏ |         10 | data-manager                                                                           ✔ |         15 | data-manager
     #> ⠏ |          0 | data                                                                                   ✔ |         16 | data
     #> ⠏ |          0 | fct_charts                                                                             ⠙ |          2 | fct_charts                                                                             ⠼ |          5 | fct_charts                                                                             ⠧ |          8 | fct_charts                                                                             ✔ |          8 | fct_charts
-    #> ⠏ |          0 | fct_value_boxes                                                                        ⠏ |         10 | fct_value_boxes                                                                        ⠋ |         21 | fct_value_boxes                                                                        ⠏ |         30 | fct_value_boxes                                                                        ✔ |         39 | fct_value_boxes
+    #> ⠏ |          0 | fct_value_boxes                                                                        ⠏ |         10 | fct_value_boxes                                                                        ⠋ |         21 | fct_value_boxes                                                                        ⠏ |         30 | fct_value_boxes                                                                        ✔ |         40 | fct_value_boxes
     #> ⠏ |          0 | formatting-functions                                                                   ⠏ |         20 | formatting-functions                                                                   ⠧ |         38 | formatting-functions                                                                   ✔ |         44 | formatting-functions
     #> ⠏ |          0 | kpi-calculations                                                                       ⠇ |          9 | kpi-calculations                                                                       ✔ |         22 | kpi-calculations
     #> ⠏ |          0 | mod_dashboard                                                                          ⠙ |          2 | mod_dashboard                                                                          ⠹ |          3 | mod_dashboard                                                                          ⠦ |          7 | mod_dashboard                                                                          ⠸ |         14 | mod_dashboard                                                                          ⠼ |         15 | mod_dashboard                                                                          ⠴ |         16 | mod_dashboard                                                                          ✔ |         22 | mod_dashboard [1.6s]
     #> ⠏ |          0 | mod_data_upload                                                                        ⠼ |         15 | mod_data_upload                                                                        ⠇ |         19 | mod_data_upload                                                                        ⠙ |         22 | mod_data_upload                                                                        ⠏ |         30 | mod_data_upload                                                                        ✔ |         31 | mod_data_upload
-    #> ⠏ |          0 | mod_kpi_cards                                                                          ⠼ |         15 | mod_kpi_cards                                                                          ⠙ |         32 | mod_kpi_cards                                                                          ⠧ |         38 | mod_kpi_cards                                                                          ✔ |         39 | mod_kpi_cards
+    #> ⠏ |          0 | mod_kpi_cards                                                                          ⠼ |         15 | mod_kpi_cards                                                                          ⠙ |         32 | mod_kpi_cards                                                                          ⠧ |         38 | mod_kpi_cards                                                                          ✔ |         38 | mod_kpi_cards
     #> ⠏ |          0 | run_app                                                                                ✔ |          4 | run_app
     #> ⠏ |          0 | utils_charts                                                                           ⠼ |         15 | utils_charts                                                                           ✔ |         23 | utils_charts
     #> 
@@ -226,13 +226,13 @@ This project is licensed under the MIT License.
 
 ``` r
 covr::package_coverage()
-#> susneoEnergyDashboard Coverage: 91.89%
-#> R/utils_charts.R: 68.97%
+#> susneoEnergyDashboard Coverage: 91.76%
+#> R/utils_charts.R: 70.83%
 #> R/mod_data_upload.R: 80.00%
-#> R/mod_kpi_cards.R: 82.09%
+#> R/mod_kpi_cards.R: 81.25%
 #> R/class_data_manager.R: 84.17%
-#> R/mod_dashboard.R: 96.74%
-#> R/fct_value_boxes.R: 98.31%
+#> R/mod_dashboard.R: 97.50%
+#> R/fct_value_boxes.R: 98.46%
 #> R/app_config.R: 100.00%
 #> R/app_server.R: 100.00%
 #> R/app_ui.R: 100.00%

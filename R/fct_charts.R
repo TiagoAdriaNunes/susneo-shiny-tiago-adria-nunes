@@ -43,7 +43,7 @@ create_time_series_chart <- function(data, data_manager) {
       }"
       )
     ) |>
-    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_colors(c("#2E86AB")) |>
     highcharter::hc_size(height = 400)
 }
 
@@ -87,7 +87,7 @@ create_facility_chart <- function(data, data_manager) {
       }"
       )
     ) |>
-    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_colors(c("#2E86AB")) |>
     highcharter::hc_size(height = 400)
 }
 
@@ -131,11 +131,11 @@ create_energy_type_chart <- function(data, data_manager) {
       )
     ) |>
     highcharter::hc_colors(c(
-      "#007bc2",
-      "#007bc2",
-      "#007bc2",
-      "#007bc2",
-      "#007bc2"
+      "#2E86AB",
+      "#A23B72",
+      "#F18F01",
+      "#C73E1D",
+      "#593E2C"
     )) |>
     highcharter::hc_size(height = 400)
 }
@@ -189,6 +189,6 @@ create_trend_chart <- function(data, data_manager) {
       }"
       )
     ) |>
-    highcharter::hc_colors(c("#007bc2")) |>
+    highcharter::hc_colors(c("#2E86AB")) |>
     highcharter::hc_size(height = 400)
 }
