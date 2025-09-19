@@ -140,8 +140,8 @@ my_data <- data.frame(
   carbon_emission_in_kgco2e = rnorm(100, 50, 10)
 )
 
-# Save as CSV and upload through the app interface
-write.csv(my_data, "my_energy_data.csv", row.names = FALSE)
+# Save as CSV and place in the data folder
+write.csv(my_data, "sample_data.csv", row.names = FALSE)
 ```
 
 ## Development
