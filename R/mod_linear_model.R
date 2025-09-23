@@ -244,7 +244,7 @@ mod_linear_model_server <- function(id, data_manager, filtered_data) {
               glue::glue("This relationship is {slope_sig}.")
             ),
             shiny::tags$li(
-              shiny::strong(glue::glue("Model Fit (R²={r_sq_percent}%): ")),
+              shiny::strong(glue::glue("Model Fit (R\u00b2={r_sq_percent}%): ")),
               fit_interpretation
             )
           )
