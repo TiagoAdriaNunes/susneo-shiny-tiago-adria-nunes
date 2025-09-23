@@ -7,6 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList h1 dateRangeInput updateDateRangeInput selectizeInput actionButton div h3 br
+#' @importFrom glue glue
 #' @importFrom DT dataTableOutput
 #' @importFrom highcharter highchartOutput
 #' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns layout_column_wrap
@@ -78,7 +79,8 @@ mod_dashboard_ui <- function(id) {
       bslib::card_body(
         DT::dataTableOutput(ns("data_table"))
       )
-    )
+    ),
+    mod_linear_model_ui(ns("linear_model"))
   )
 }
 
@@ -168,6 +170,9 @@ mod_dashboard_server <- function(id, data_manager) {
 
     # KPI Cards submodule
     mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
+    
+    # Linear Model submodule
+    mod_linear_model_server("linear_model", data_manager, filtered_data)
 
     # Charts using extracted functions with validation
     output$time_series_plot <- highcharter::renderHighchart({
