@@ -170,7 +170,7 @@ mod_dashboard_server <- function(id, data_manager) {
 
     # KPI Cards submodule
     mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
-    
+
     # Linear Model submodule
     mod_linear_model_server("linear_model", data_manager, filtered_data)
 

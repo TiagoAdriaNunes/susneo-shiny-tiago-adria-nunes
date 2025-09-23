@@ -229,7 +229,7 @@ data_manager <- R6::R6Class(
         },
         error = function(e) {
           warning("Error fitting linear model: ", e$message)
-          return(NULL)
+          NULL
         }
       )
     },
