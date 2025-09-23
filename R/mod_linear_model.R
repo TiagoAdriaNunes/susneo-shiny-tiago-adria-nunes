@@ -51,6 +51,7 @@ mod_linear_model_ui <- function(id) {
 #' @importFrom DT renderDataTable datatable
 #' @importFrom highcharter renderHighchart hchart hcaes hc_title hc_xAxis hc_yAxis hc_tooltip hc_add_series
 #' @importFrom glue glue
+#' @importFrom stats pf predict
 mod_linear_model_server <- function(id, data_manager, filtered_data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
