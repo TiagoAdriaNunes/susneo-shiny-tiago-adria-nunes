@@ -28,6 +28,8 @@ The application features:
 
 - **Interactive Charts**: Time series, facility comparisons, and energy
   type distributions
+- **Linear Model Analysis**: CO2 emissions vs energy consumption
+  correlation with statistical interpretation
 - **KPI Metrics**: Real-time calculation of consumption, emissions, and
   efficiency ratios
 - **Advanced Filtering**: Date ranges, facilities, and energy types
@@ -38,7 +40,7 @@ The application features:
 
 ### Prerequisites
 
-Make sure you have R (\>= 4.0.0) installed on your system.
+Make sure you have R (\>= 4.1.0) installed on your system.
 
 ### Install from GitHub
 
@@ -97,6 +99,12 @@ Your CSV files should include these columns:
   consumption trends over time
 - **Facility Comparison**: Column chart comparing total energy usage
   across different facilities
+- **Linear Model Analysis**: Statistical analysis of CO2 emissions vs
+  energy consumption relationship with:
+  - Interactive scatter plot with regression line
+  - Model summary table (coefficients, R-squared, F-statistic)
+  - Plain-language interpretation of statistical significance
+  - Relationship strength and direction analysis
 - **Data Table**: Detailed summary table with filtering and sorting
   capabilities
 
@@ -140,8 +148,8 @@ my_data <- data.frame(
   carbon_emission_in_kgco2e = rnorm(100, 50, 10)
 )
 
-# Save as CSV and place in the data folder
-write.csv(my_data, "sample_data.csv", row.names = FALSE)
+# Save as CSV and upload through the app interface
+write.csv(my_data, "my_energy_data.csv", row.names = FALSE)
 ```
 
 ## Development
@@ -193,7 +201,7 @@ This project is licensed under the MIT License.
 
 ## Version Info
 
-**Version**: 0.0.0.9009 **Compiled**: 2025-09-18 04:39:48.462695
+**Version**: 0.0.0.9010 **Compiled**: 2025-09-23 00:51:58.098374
 
 ## Development Status
 
@@ -202,22 +210,23 @@ This project is licensed under the MIT License.
     #> ⠏ |          0 | app_config                                                                             ✔ |          5 | app_config
     #> ⠏ |          0 | app_server                                                                             ⠙ |          2 | app_server                                                                             ✔ |          3 | app_server
     #> ⠏ |          0 | app_ui                                                                                 ⠋ |          1 | app_ui                                                                                 ✔ |          5 | app_ui
-    #> ⠏ |          0 | data-manager                                                                           ⠏ |         10 | data-manager                                                                           ✔ |         15 | data-manager
+    #> ⠏ |          0 | data-manager                                                                           ⠴ |          6 | data-manager                                                                           ⠹ |         13 | data-manager                                                                           ✔ |         15 | data-manager
     #> ⠏ |          0 | data                                                                                   ✔ |         16 | data
-    #> ⠏ |          0 | fct_charts                                                                             ⠙ |          2 | fct_charts                                                                             ⠼ |          5 | fct_charts                                                                             ⠧ |          8 | fct_charts                                                                             ✔ |          8 | fct_charts
-    #> ⠏ |          0 | fct_value_boxes                                                                        ⠏ |         10 | fct_value_boxes                                                                        ⠋ |         21 | fct_value_boxes                                                                        ⠏ |         30 | fct_value_boxes                                                                        ✔ |         40 | fct_value_boxes
-    #> ⠏ |          0 | formatting-functions                                                                   ⠏ |         20 | formatting-functions                                                                   ⠧ |         38 | formatting-functions                                                                   ✔ |         44 | formatting-functions
-    #> ⠏ |          0 | kpi-calculations                                                                       ⠇ |          9 | kpi-calculations                                                                       ✔ |         22 | kpi-calculations
-    #> ⠏ |          0 | mod_dashboard                                                                          ⠙ |          2 | mod_dashboard                                                                          ⠹ |          3 | mod_dashboard                                                                          ⠦ |          7 | mod_dashboard                                                                          ⠸ |         14 | mod_dashboard                                                                          ⠼ |         15 | mod_dashboard                                                                          ⠴ |         16 | mod_dashboard                                                                          ✔ |         22 | mod_dashboard [1.6s]
-    #> ⠏ |          0 | mod_data_upload                                                                        ⠼ |         15 | mod_data_upload                                                                        ⠇ |         19 | mod_data_upload                                                                        ⠙ |         22 | mod_data_upload                                                                        ⠏ |         30 | mod_data_upload                                                                        ✔ |         31 | mod_data_upload
-    #> ⠏ |          0 | mod_kpi_cards                                                                          ⠼ |         15 | mod_kpi_cards                                                                          ⠙ |         32 | mod_kpi_cards                                                                          ⠧ |         38 | mod_kpi_cards                                                                          ✔ |         38 | mod_kpi_cards
+    #> ⠏ |          0 | fct_charts                                                                             ⠙ |          2 | fct_charts                                                                             ⠴ |          6 | fct_charts                                                                             ✔ |          8 | fct_charts
+    #> ⠏ |          0 | fct_value_boxes                                                                        ⠧ |          8 | fct_value_boxes                                                                        ⠴ |         16 | fct_value_boxes                                                                        ⠴ |         26 | fct_value_boxes                                                                        ⠋ |         31 | fct_value_boxes                                                                        ✔ |         39 | fct_value_boxes
+    #> ⠏ |          0 | formatting-functions                                                                   ⠧ |         18 | formatting-functions                                                                   ⠙ |         32 | formatting-functions                                                                   ✔ |         44 | formatting-functions
+    #> ⠏ |          0 | kpi-calculations                                                                       ⠸ |          4 | kpi-calculations                                                                       ⠇ |          9 | kpi-calculations                                                                       ⠼ |         15 | kpi-calculations                                                                       ✔ |         22 | kpi-calculations
+    #> ⠏ |          0 | mod_dashboard                                                                          ⠋ |          1 | mod_dashboard                                                                          ⠹ |          3 | mod_dashboard                                                                          ⠼ |          5 | mod_dashboard                                                                          ⠦ |          7 | mod_dashboard                                                                          ⠸ |         14 | mod_dashboard                                                                          ⠼ |         15 | mod_dashboard                                                                          ⠴ |         16 | mod_dashboard                                                                          ✔ |         22 | mod_dashboard [2.8s]
+    #> ⠏ |          0 | mod_data_upload                                                                        ⠴ |         16 | mod_data_upload                                                                        ⠇ |         19 | mod_data_upload                                                                        ⠙ |         22 | mod_data_upload                                                                        ⠏ |         30 | mod_data_upload                                                                        ✔ |         31 | mod_data_upload
+    #> ⠏ |          0 | mod_kpi_cards                                                                          ⠹ |         13 | mod_kpi_cards                                                                          ⠼ |         25 | mod_kpi_cards                                                                          ⠴ |         36 | mod_kpi_cards                                                                          ✔ |         39 | mod_kpi_cards
+    #> ⠏ |          0 | mod_linear_model                                                                       ⠧ |          8 | mod_linear_model                                                                       ⠸ |         14 | mod_linear_model                                                                       ⠧ |         18 | mod_linear_model                                                                       ⠇ |         19 | mod_linear_model                                                                       ⠏ |         20 | mod_linear_model                                                                       ⠏ |         30 | mod_linear_model                                                                       ✔ |         33 | mod_linear_model [1.3s]
     #> ⠏ |          0 | run_app                                                                                ✔ |          4 | run_app
-    #> ⠏ |          0 | utils_charts                                                                           ⠼ |         15 | utils_charts                                                                           ✔ |         23 | utils_charts
+    #> ⠏ |          0 | utils_charts                                                                           ⠸ |         14 | utils_charts                                                                           ✔ |         23 | utils_charts
     #> 
     #> ══ Results ═════════════════════════════════════════════════════════════════════════════════════════════
-    #> Duration: 5.2 s
+    #> Duration: 8.1 s
     #> 
-    #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 276 ]
+    #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 309 ]
     #> Tests: All tests passing ✅
     #> Coverage: See CI badges for coverage status
     #> CI Status: See badges above for current build status
@@ -226,12 +235,13 @@ This project is licensed under the MIT License.
 
 ``` r
 covr::package_coverage()
-#> susneoEnergyDashboard Coverage: 91.76%
-#> R/utils_charts.R: 70.83%
+#> susneoEnergyDashboard Coverage: 91.66%
+#> R/utils_charts.R: 68.97%
 #> R/mod_data_upload.R: 80.00%
-#> R/mod_kpi_cards.R: 81.25%
-#> R/class_data_manager.R: 84.17%
-#> R/mod_dashboard.R: 97.50%
+#> R/mod_kpi_cards.R: 82.09%
+#> R/class_data_manager.R: 83.85%
+#> R/mod_linear_model.R: 92.31%
+#> R/mod_dashboard.R: 96.77%
 #> R/fct_value_boxes.R: 98.46%
 #> R/app_config.R: 100.00%
 #> R/app_server.R: 100.00%
@@ -243,15 +253,28 @@ covr::package_coverage()
 
 ### Recent Updates
 
-- Comprehensive test suite with 240+ tests
-- Enhanced module test coverage (dashboard, KPI cards, data upload)
+#### Version 0.0.0.9010 (Latest)
+
+- **Linear Model Analysis**: New statistical analysis module for CO2
+  emissions vs energy consumption
+  - Interactive scatter plot with regression line visualization
+  - Comprehensive model summary table with statistical metrics
+  - Plain-language interpretation of results and significance levels
+  - Modular architecture following best practices
+  - Full test coverage with realistic data scenarios
+
+#### Previous Updates
+
+- Comprehensive test suite with 320+ tests
+- Enhanced module test coverage (dashboard, KPI cards, data upload,
+  linear model)
 - CI/CD pipeline with multi-platform testing
 - Code coverage tracking
 - Automated linting and code quality checks
 - Documentation with pkgdown
 - Sample data and example usage
 - Resolved namespace conflicts and import issues
-- Adjusted the Value Boxes.
+- Adjusted the Value Boxes
 
 ### Known Issues
 
@@ -261,7 +284,11 @@ covr::package_coverage()
 
 ### Roadmap
 
+- [x] Linear model analysis for CO2 vs energy correlation ✅
+  (v0.0.0.9010)
 - [ ] Enhanced data visualization options
 - [ ] Export functionality for charts and reports
+- [ ] Advanced statistical models (multiple regression, time series
+  analysis)
 - [ ] Advanced filtering and aggregation features
 - [ ] Performance optimizations for large datasets

@@ -27,7 +27,11 @@ data_manager <- R6::R6Class(
       tryCatch(
         {
           # Load sample_data from package data
-          data("sample_data", package = "susneoEnergyDashboard", envir = environment())
+          data(
+            "sample_data",
+            package = "susneoEnergyDashboard",
+            envir = environment()
+          )
           self$raw_data(sample_data)
           self$process_data()
           return(TRUE)
@@ -69,7 +73,8 @@ data_manager <- R6::R6Class(
       }
 
       # Parse dates with mixed formats
-      data$date <- lubridate::parse_date_time(data$date,
+      data$date <- lubridate::parse_date_time(
+        data$date,
         orders = c("dmy", "mdy", "ymd", "dby", "mby", "ybd"),
         quiet = TRUE
       ) |>
@@ -85,8 +90,12 @@ data_manager <- R6::R6Class(
       }
 
       if ("carbon_emission_in_kgco2e" %in% names(data)) {
-        data$carbon_emission_in_kgco2e <- as.numeric(data$carbon_emission_in_kgco2e)
-        data$carbon_emission_in_kgco2e[is.na(data$carbon_emission_in_kgco2e)] <- 0
+        data$carbon_emission_in_kgco2e <- as.numeric(
+          data$carbon_emission_in_kgco2e
+        )
+        data$carbon_emission_in_kgco2e[is.na(
+          data$carbon_emission_in_kgco2e
+        )] <- 0
       }
 
       self$processed_data(data)
@@ -126,7 +135,11 @@ data_manager <- R6::R6Class(
     },
 
     # Filtering methods
-    apply_filters = function(date_range = NULL, facilities = NULL, energy_types = NULL) {
+    apply_filters = function(
+      date_range = NULL,
+      facilities = NULL,
+      energy_types = NULL
+    ) {
       data <- self$processed_data()
 
       if (nrow(data) == 0) {
@@ -173,10 +186,52 @@ data_manager <- R6::R6Class(
       } else {
         daily_totals <- filtered_data |>
           dplyr::group_by(date) |>
-          dplyr::summarise(daily_total = sum(value, na.rm = TRUE), .groups = "drop")
+          dplyr::summarise(
+            daily_total = sum(value, na.rm = TRUE),
+            .groups = "drop"
+          )
 
         mean(daily_totals$daily_total, na.rm = TRUE)
       }
+    },
+    fit_linear_model = function(
+      filtered_data,
+      x_var = "carbon_emission_in_kgco2e",
+      y_var = "value"
+    ) {
+      if (nrow(filtered_data) == 0) {
+        return(NULL)
+      }
+
+      if (
+        !x_var %in% names(filtered_data) || !y_var %in% names(filtered_data)
+      ) {
+        warning("Specified variables not found in data")
+        return(NULL)
+      }
+
+      # Remove rows with missing values for the specified variables
+      model_data <- filtered_data[
+        !is.na(filtered_data[[x_var]]) & !is.na(filtered_data[[y_var]]),
+      ]
+
+      if (nrow(model_data) < 2) {
+        warning("Insufficient data points for linear model")
+        return(NULL)
+      }
+
+      tryCatch(
+        {
+          # Create formula dynamically
+          formula_str <- paste(y_var, "~", x_var)
+          model <- lm(as.formula(formula_str), data = model_data)
+          model
+        },
+        error = function(e) {
+          warning("Error fitting linear model: ", e$message)
+          NULL
+        }
+      )
     },
 
     # Data preparation for charts
@@ -187,7 +242,10 @@ data_manager <- R6::R6Class(
 
       filtered_data |>
         dplyr::group_by(date) |>
-        dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
+        dplyr::summarise(
+          total_value = sum(value, na.rm = TRUE),
+          .groups = "drop"
+        ) |>
         dplyr::arrange(date)
     },
     prepare_facility_data = function(filtered_data) {
@@ -197,7 +255,10 @@ data_manager <- R6::R6Class(
 
       filtered_data |>
         dplyr::group_by(site) |>
-        dplyr::summarise(total_value = sum(value, na.rm = TRUE), .groups = "drop") |>
+        dplyr::summarise(
+          total_value = sum(value, na.rm = TRUE),
+          .groups = "drop"
+        ) |>
         dplyr::arrange(dplyr::desc(total_value))
     },
     prepare_summary_data = function(filtered_data) {
@@ -223,7 +284,9 @@ data_manager <- R6::R6Class(
         "--"
       } else {
         formatted <- format(round(number, 0), big.mark = ",")
-        if (suffix != "") formatted <- paste(formatted, suffix)
+        if (suffix != "") {
+          formatted <- paste(formatted, suffix)
+        }
         formatted
       }
     },
