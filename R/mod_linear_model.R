@@ -67,7 +67,9 @@ mod_linear_model_server <- function(id, data_manager, filtered_data) {
       plot_data <- data[!is.na(data$carbon_emission_in_kgco2e) & !is.na(data$value), ]
 
       if (nrow(plot_data) == 0) {
-        return(highcharter::hchart(data.frame(x = 0, y = 0), "scatter", x = x, y = y) |>
+        empty_data <- data.frame(x = 0, y = 0)
+        return(highcharter::hchart(empty_data, "scatter", 
+                                 highcharter::hcaes(x = "x", y = "y")) |>
                  highcharter::hc_title(text = "No data available"))
       }
 
@@ -75,8 +77,8 @@ mod_linear_model_server <- function(id, data_manager, filtered_data) {
       model <- data_manager$fit_linear_model(plot_data)
 
       hc <- highcharter::hchart(plot_data, "scatter",
-                                highcharter::hcaes(x = carbon_emission_in_kgco2e,
-                                                   y = value),
+                                highcharter::hcaes(x = "carbon_emission_in_kgco2e",
+                                                   y = "value"),
                                 color = "#007bc2") |>
         highcharter::hc_title(text = "CO2 Emissions vs Energy Consumption") |>
         highcharter::hc_xAxis(title = list(text = "CO2 Emissions (kg CO2e)")) |>

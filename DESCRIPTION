@@ -1,6 +1,6 @@
 Package: susneoEnergyDashboard
 Title: SUSNEO Energy Dashboard
-Version: 0.0.0.9009
+Version: 0.0.0.9010
 Depends: R (>= 4.1.0)
 Authors@R: 
     person(given = "Tiago",
@@ -15,6 +15,7 @@ Imports:
     config,
     dplyr,
     DT,
+    glue,
     golem,
     highcharter,
     htmlwidgets,
