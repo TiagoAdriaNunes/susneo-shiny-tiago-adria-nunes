@@ -68,8 +68,8 @@ mod_linear_model_server <- function(id, data_manager, filtered_data) {
 
       if (nrow(plot_data) == 0) {
         empty_data <- data.frame(x = 0, y = 0)
-        return(highcharter::hchart(empty_data, "scatter", 
-                                 highcharter::hcaes(x = "x", y = "y")) |>
+        return(highcharter::hchart(empty_data, "scatter",
+                                   highcharter::hcaes(x = "x", y = "y")) |>
                  highcharter::hc_title(text = "No data available"))
       }
 
