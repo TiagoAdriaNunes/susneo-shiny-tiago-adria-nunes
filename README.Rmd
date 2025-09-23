@@ -34,6 +34,7 @@ SUSNEO Energy Dashboard is an interactive energy dashboard built with R Shiny th
 The application features:
 
 - **Interactive Charts**: Time series, facility comparisons, and energy type distributions
+- **Linear Model Analysis**: CO2 emissions vs energy consumption correlation with statistical interpretation
 - **KPI Metrics**: Real-time calculation of consumption, emissions, and efficiency ratios
 - **Advanced Filtering**: Date ranges, facilities, and energy types
 - **Responsive Design**: Modern UI with bslib and Bootstrap
@@ -43,7 +44,7 @@ The application features:
 
 ### Prerequisites
 
-Make sure you have R (>= 4.0.0) installed on your system.
+Make sure you have R (>= 4.1.0) installed on your system.
 
 ### Install from GitHub
 
@@ -98,6 +99,11 @@ Your CSV files should include these columns:
 - **KPI Cards**: Display key metrics including total consumption, emissions, daily averages, efficiency ratios, peak usage, and facility counts
 - **Time Series Chart**: Interactive line chart showing energy consumption trends over time
 - **Facility Comparison**: Column chart comparing total energy usage across different facilities
+- **Linear Model Analysis**: Statistical analysis of CO2 emissions vs energy consumption relationship with:
+  - Interactive scatter plot with regression line
+  - Model summary table (coefficients, R-squared, F-statistic)
+  - Plain-language interpretation of statistical significance
+  - Relationship strength and direction analysis
 - **Data Table**: Detailed summary table with filtering and sorting capabilities
 
 ### Data Management
@@ -256,22 +262,33 @@ covr::package_coverage()
 ```
 
 ### Recent Updates
-- Comprehensive test suite with 240+ tests
-- Enhanced module test coverage (dashboard, KPI cards, data upload)
+#### Version 0.0.0.9010 (Latest)
+- **Linear Model Analysis**: New statistical analysis module for CO2 emissions vs energy consumption
+  - Interactive scatter plot with regression line visualization
+  - Comprehensive model summary table with statistical metrics
+  - Plain-language interpretation of results and significance levels
+  - Modular architecture following best practices
+  - Full test coverage with realistic data scenarios
+
+#### Previous Updates
+- Comprehensive test suite with 320+ tests
+- Enhanced module test coverage (dashboard, KPI cards, data upload, linear model)
 - CI/CD pipeline with multi-platform testing
 - Code coverage tracking
 - Automated linting and code quality checks
 - Documentation with pkgdown
 - Sample data and example usage
 - Resolved namespace conflicts and import issues
-- Adjusted the Value Boxes.
+- Adjusted the Value Boxes
 
 ### Known Issues
 
 - Check [Issues page](https://github.com/TiagoAdriaNunes/susneo-shiny-tiago-adria-nunes/issues) for current status
 
 ### Roadmap
+- [x] Linear model analysis for CO2 vs energy correlation ✅ (v0.0.0.9010)
 - [ ] Enhanced data visualization options
 - [ ] Export functionality for charts and reports
+- [ ] Advanced statistical models (multiple regression, time series analysis)
 - [ ] Advanced filtering and aggregation features
 - [ ] Performance optimizations for large datasets
