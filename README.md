@@ -179,6 +179,7 @@ run_app()
     ├── R/                          # R source code
     │   ├── app_*.R                # App configuration
     │   ├── mod_*.R                # Shiny modules
+    │   ├── class_*.R              # R6 class that owns the app's data (EnergyDataManager)
     │   ├── fct_*.R                # Business logic as pure functions (data, charts, KPIs, linear model)
     │   └── utils_*.R              # Utility functions
     ├── data/                      # Package data
@@ -200,31 +201,12 @@ This project is licensed under the MIT License.
 
 ## Version Info
 
-**Version**: 0.0.1 **Compiled**: 2026-10-02 01:00:24.645816
+**Version**: 0.0.1 **Compiled**: 2026-10-02 01:13:55.210651
 
 ## Development Status
 
     #> Package: Development version loaded ✅
-    #> ✔ | F W  S  OK | Context
-    #> ⠏ |          0 | app_config                                                     ⠸ |          4 | app_config                                                     ✔ |          5 | app_config
-    #> ⠏ |          0 | app_server                                                     ⠙ |          2 | app_server                                                     ⠸ |          4 | app_server                                                     ✔ |          5 | app_server
-    #> ⠏ |          0 | app_ui                                                         ⠋ |          1 | app_ui                                                         ⠴ |          6 | app_ui                                                         ⠇ |          9 | app_ui                                                         ✔ |          9 | app_ui [2.1s]
-    #> ⠏ |          0 | data                                                           ⠼ |          5 | data                                                           ⠹ |         13 | data                                                           ✔ |         16 | data
-    #> ⠏ |          0 | fct_charts                                                     ⠹ |          3 | fct_charts                                                     ⠇ |          9 | fct_charts                                                     ⠹ |         13 | fct_charts                                                     ✔ |         14 | fct_charts
-    #> ⠏ |          0 | fct_data                                                       ⠹ |          3 | fct_data                                                       ⠇ |          9 | fct_data                                                       ⠸ |         14 | fct_data                                                       ⠏ |         20 | fct_data                                                       ⠸ |         24 | fct_data                                                       ⠇ |         29 | fct_data                                                       ⠸ |         34 | fct_data                                                       ⠇ |         39 | fct_data                                                       ⠸ |         44 | fct_data                                                       ⠧ |         48 | fct_data                                                       ⠹ |         53 | fct_data                                                       ✔ |         54 | fct_data [1.2s]
-    #> ⠏ |          0 | fct_linear_model                                               ⠸ |          4 | fct_linear_model                                               ⠦ |          7 | fct_linear_model                                               ⠹ |         13 | fct_linear_model                                               ⠧ |         18 | fct_linear_model                                               ⠇ |         29 | fct_linear_model                                               ⠧ |         38 | fct_linear_model                                               ⠴ |         46 | fct_linear_model                                               ✔ |         47 | fct_linear_model
-    #> ⠏ |          0 | fct_value_boxes                                                ⠦ |          7 | fct_value_boxes                                                ⠙ |         12 | fct_value_boxes                                                ⠧ |         18 | fct_value_boxes                                                ⠹ |         23 | fct_value_boxes                                                ⠋ |         31 | fct_value_boxes                                                ⠋ |         41 | fct_value_boxes                                                ⠧ |         48 | fct_value_boxes                                                ⠸ |         54 | fct_value_boxes                                                ⠏ |         60 | fct_value_boxes                                                ⠦ |         67 | fct_value_boxes                                                ⠹ |         73 | fct_value_boxes                                                ✔ |         74 | fct_value_boxes [1.4s]
-    #> ⠏ |          0 | formatting-functions                                           ⠼ |          5 | formatting-functions                                           ⠙ |         12 | formatting-functions                                           ⠇ |         19 | formatting-functions                                           ⠼ |         25 | formatting-functions                                           ⠙ |         32 | formatting-functions                                           ✔ |         36 | formatting-functions
-    #> ⠏ |          0 | mod_dashboard                                                  ⠋ |          1 | mod_dashboard                                                  ⠹ |          3 | mod_dashboard                                                  ⠦ |          7 | mod_dashboard                                                  ⠦ |         17 | mod_dashboard                                                  ⠧ |         18 | mod_dashboard                                                  ⠇ |         19 | mod_dashboard                                                  ⠏ |         20 | mod_dashboard                                                  ⠋ |         21 | mod_dashboard                                                  ⠹ |         23 | mod_dashboard                                                  ⠸ |         24 | mod_dashboard                                                  ⠼ |         25 | mod_dashboard                                                  ⠧ |         28 | mod_dashboard                                                  ⠇ |         29 | mod_dashboard                                                  ⠏ |         30 | mod_dashboard                                                  ✔ |         30 | mod_dashboard [7.6s]
-    #> ⠏ |          0 | mod_kpi_cards                                                  ⠦ |          7 | mod_kpi_cards                                                  ⠼ |         15 | mod_kpi_cards                                                  ⠦ |         17 | mod_kpi_cards                                                  ⠹ |         23 | mod_kpi_cards                                                  ⠸ |         24 | mod_kpi_cards                                                  ⠼ |         25 | mod_kpi_cards                                                  ✔ |         30 | mod_kpi_cards [1.2s]
-    #> ⠏ |          0 | mod_linear_model                                               ⠦ |          7 | mod_linear_model                                               ⠧ |          8 | mod_linear_model                                               ⠸ |         14 | mod_linear_model                                               ⠧ |         18 | mod_linear_model                                               ⠙ |         22 | mod_linear_model                                               ⠹ |         23 | mod_linear_model                                               ⠼ |         25 | mod_linear_model                                               ⠇ |         29 | mod_linear_model                                               ⠙ |         32 | mod_linear_model                                               ✔ |         33 | mod_linear_model [1.3s]
-    #> ⠏ |          0 | run_app                                                        ✔ |          4 | run_app
-    #> ⠏ |          0 | utils_charts                                                   ⠏ |         10 | utils_charts                                                   ✔ |         11 | utils_charts
-    #> 
-    #> ══ Results ═════════════════════════════════════════════════════════════════════
-    #> Duration: 17.8 s
-    #> 
-    #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 368 ]
+    #> [ FAIL 0 | WARN 0 | SKIP 0 | PASS 393 ]
     #> Tests: All tests passing ✅
     #> Coverage: See CI badges for coverage status
     #> CI Status: See badges above for current build status
@@ -233,12 +215,13 @@ This project is licensed under the MIT License.
 
 ``` r
 covr::package_coverage()
-#> susneoEnergyDashboard Coverage: 99.58%
+#> susneoEnergyDashboard Coverage: 99.59%
 #> R/fct_linear_model.R: 98.20%
 #> R/mod_linear_model.R: 99.03%
 #> R/app_config.R: 100.00%
 #> R/app_server.R: 100.00%
 #> R/app_ui.R: 100.00%
+#> R/class_energy_data_manager.R: 100.00%
 #> R/fct_charts.R: 100.00%
 #> R/fct_data.R: 100.00%
 #> R/fct_value_boxes.R: 100.00%
@@ -260,9 +243,11 @@ covr::package_coverage()
   notation (for example `1e+06`)
 - **Added**: warning when a selection mixes energy types (they can use
   different units)
-- **Changed**: the data layer is now plain functions (`fct_data.R`,
-  `fct_linear_model.R`) instead of an R6 class, and all package code
-  uses `importFrom` instead of `pkg::fn`
+- **Changed**: the R6 class is now `EnergyDataManager`, which owns the
+  cleaned data and serves the dashboard’s filters. It delegates the
+  calculations to plain functions (`fct_data.R`, `fct_linear_model.R`)
+  that can be tested without Shiny. All package code uses `importFrom`
+  instead of `pkg::fn`
 - **Removed**: the CSV upload and “Load Sample Data” code, which was
   never reachable from the app, and the energy type pie chart and trend
   chart, which were never displayed

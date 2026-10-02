@@ -20,6 +20,7 @@ Imports:
     highcharter,
     htmlwidgets,
     lubridate,
+    R6,
     shiny,
     stats,
     utils

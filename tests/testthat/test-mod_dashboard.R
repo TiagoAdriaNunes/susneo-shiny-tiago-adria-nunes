@@ -40,7 +40,7 @@ test_that("mod_dashboard_ui contains all main components", {
 test_that("mod_dashboard_server returns the data filtered by the inputs", {
   data <- make_energy_data()
 
-  testServer(mod_dashboard_server, args = list(energy_data = reactive(data)), {
+  testServer(mod_dashboard_server, args = list(data_manager = reactive(EnergyDataManager$new(data))), {
     session$setInputs(date_range = full_range(), facilities = NULL, energy_types = NULL)
     session$elapse(600)
     expect_equal(nrow(session$returned()), 5)
@@ -60,7 +60,7 @@ test_that("mod_dashboard_server returns the data filtered by the inputs", {
 })
 
 test_that("mod_dashboard_server stays silent when there is no data", {
-  testServer(mod_dashboard_server, args = list(energy_data = reactive(data.frame())), {
+  testServer(mod_dashboard_server, args = list(data_manager = reactive(EnergyDataManager$new(data.frame()))), {
     session$setInputs(date_range = full_range())
     session$elapse(600)
 
@@ -70,14 +70,14 @@ test_that("mod_dashboard_server stays silent when there is no data", {
 })
 
 test_that("mod_dashboard_server follows changes in the data", {
-  energy_data <- reactiveVal(make_energy_data())
+  data_manager <- reactiveVal(EnergyDataManager$new(make_energy_data()))
 
-  testServer(mod_dashboard_server, args = list(energy_data = energy_data), {
+  testServer(mod_dashboard_server, args = list(data_manager = data_manager), {
     session$setInputs(date_range = full_range())
     session$elapse(600)
     expect_equal(nrow(session$returned()), 5)
 
-    energy_data(make_energy_data()[1:2, ])
+    data_manager(EnergyDataManager$new(make_energy_data()[1:2, ]))
     session$flushReact()
     session$elapse(600)
     expect_equal(nrow(session$returned()), 2)
@@ -87,7 +87,7 @@ test_that("mod_dashboard_server follows changes in the data", {
 test_that("mod_dashboard_server renders the charts and the summary table", {
   data <- make_energy_data()
 
-  testServer(mod_dashboard_server, args = list(energy_data = reactive(data)), {
+  testServer(mod_dashboard_server, args = list(data_manager = reactive(EnergyDataManager$new(data))), {
     session$setInputs(date_range = full_range())
     session$elapse(600)
 
@@ -100,7 +100,7 @@ test_that("mod_dashboard_server renders the charts and the summary table", {
 test_that("mod_dashboard_server warns when the selection mixes energy types", {
   data <- make_energy_data()
 
-  testServer(mod_dashboard_server, args = list(energy_data = reactive(data)), {
+  testServer(mod_dashboard_server, args = list(data_manager = reactive(EnergyDataManager$new(data))), {
     session$setInputs(date_range = full_range(), facilities = NULL, energy_types = NULL)
     session$elapse(600)
     expect_match(output$mixed_units_note$html, "combines 3 energy types")
@@ -115,7 +115,7 @@ test_that("mod_dashboard_server handles the reset button", {
   data <- make_energy_data()
 
   expect_no_error(
-    testServer(mod_dashboard_server, args = list(energy_data = reactive(data)), {
+    testServer(mod_dashboard_server, args = list(data_manager = reactive(EnergyDataManager$new(data))), {
       session$setInputs(date_range = full_range(), facilities = "Site_A", energy_types = "Gas")
       session$setInputs(reset_filters = 1)
     })

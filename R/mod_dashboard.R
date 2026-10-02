@@ -89,31 +89,31 @@ mod_dashboard_ui <- function(id) {
 #' dashboard Server Functions
 #'
 #' @param id Module ID
-#' @param energy_data Reactive with the cleaned energy data
+#' @param data_manager Reactive returning an `EnergyDataManager`
 #'
 #' @return The debounced reactive with the filtered data
 #'
 #' @noRd
-mod_dashboard_server <- function(id, energy_data) {
+mod_dashboard_server <- function(id, data_manager) {
   moduleServer(id, function(input, output, session) {
     # Refresh the filter choices whenever new data is loaded
     observe({
-      data <- energy_data()
-      req(nrow(data) > 0)
+      dm <- data_manager()
+      req(dm$has_data())
 
-      date_range <- get_date_range(data)
+      date_range <- dm$date_range()
 
       updateSelectizeInput(
         session,
         "facilities",
-        choices = get_facilities(data),
+        choices = dm$facilities(),
         selected = NULL
       )
 
       updateSelectizeInput(
         session,
         "energy_types",
-        choices = get_energy_types(data),
+        choices = dm$energy_types(),
         selected = NULL
       )
 
@@ -128,10 +128,10 @@ mod_dashboard_server <- function(id, energy_data) {
     })
 
     observeEvent(input$reset_filters, {
-      data <- energy_data()
+      dm <- data_manager()
 
-      if (nrow(data) > 0) {
-        date_range <- get_date_range(data)
+      if (dm$has_data()) {
+        date_range <- dm$date_range()
 
         updateDateRangeInput(
           session,
@@ -152,12 +152,11 @@ mod_dashboard_server <- function(id, energy_data) {
     })
 
     filtered_data <- reactive({
-      data <- energy_data()
-      req(nrow(data) > 0)
+      dm <- data_manager()
+      req(dm$has_data())
       req(length(input$date_range) == 2)
 
-      filter_energy_data(
-        data,
+      dm$filter(
         date_range = input$date_range,
         facilities = input$facilities,
         energy_types = input$energy_types
