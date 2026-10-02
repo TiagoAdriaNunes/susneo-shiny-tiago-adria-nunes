@@ -2,24 +2,18 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @importFrom shiny tagList useBusyIndicators
 #' @noRd
+#'
+#' @importFrom golem add_resource_path bundle_resources favicon
+#' @importFrom shiny tagList tags useBusyIndicators
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Set global Highcharts options for number formatting
-    shiny::tags$script(htmlwidgets::JS(
-      "
-      Highcharts.setOptions({
-        lang: {
-          thousandsSep: ','
-        }
-      });
-    "
-    )),
+    tags$script(set_global_chart_options()),
     # Set global date picker locale to US format
-    shiny::tags$script(
+    tags$script(
       "
       $.fn.datepicker.defaults.format = 'mm/dd/yyyy';
       $.fn.datepicker.defaults.language = 'en';
@@ -37,8 +31,6 @@ app_ui <- function(request) {
 #' This function is internally used to add external
 #' resources inside the Shiny application.
 #'
-#' @importFrom shiny tags
-#' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {
   add_resource_path(

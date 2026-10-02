@@ -17,9 +17,9 @@ format_number_with_commas <- function(number, suffix = "") {
   if (is.na(number) || is.null(number)) {
     return("--")
   }
-  formatted <- format(round(number, 0), big.mark = ",")
+  formatted <- format(round(number, 0), big.mark = ",", scientific = FALSE)
   if (suffix != "") formatted <- paste(formatted, suffix)
-  return(formatted)
+  formatted
 }
 
 #' Format energy consumption values
@@ -50,18 +50,4 @@ format_emissions_units <- function(value) {
 #' @noRd
 format_daily_usage_units <- function(value) {
   format_number_with_commas(value, "units/day")
-}
-
-#' Format percentage values
-#'
-#' @param value Numeric percentage value (0-100)
-#' @param digits Number of decimal places
-#'
-#' @return Formatted percentage string
-#' @noRd
-format_percentage <- function(value, digits = 1) {
-  if (is.na(value) || is.null(value)) {
-    return("--")
-  }
-  paste0(round(value, digits), "%")
 }

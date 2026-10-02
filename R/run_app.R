@@ -5,8 +5,9 @@
 #' @inheritParams shiny::shinyApp
 #'
 #' @export
-#' @importFrom shiny shinyApp
+#'
 #' @importFrom golem with_golem_options
+#' @importFrom shiny shinyApp
 run_app <- function(
   onStart = NULL,
   options = list(),

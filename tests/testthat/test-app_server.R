@@ -1,14 +1,18 @@
 test_that("app_server function exists and is callable", {
-  # Test that app_server is a function
   expect_true(is.function(app_server))
 
-  # Test that it can be called with mock session
-  expect_no_error({
-    suppressWarnings({
-      shiny::testServer(app_server, {
-        # Basic test that server function runs without error
-        expect_true(TRUE)
-      })
-    }, classes = "packageStartupMessage")
+  expect_no_error(
+    shiny::testServer(app_server, {
+      expect_true(TRUE)
+    })
+  )
+})
+
+test_that("app_server serves the sample data from the data folder to the dashboard", {
+  shiny::testServer(app_server, {
+    data <- energy_data()
+
+    expect_equal(nrow(data), nrow(sample_data))
+    expect_s3_class(data$date, "Date")
   })
 })

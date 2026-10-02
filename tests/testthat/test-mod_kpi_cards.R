@@ -1,188 +1,68 @@
-test_that("mod_kpi_cards_extended_ui creates correct UI structure", {
-  # Test the extended UI function
-  ui_result <- mod_kpi_cards_extended_ui("test_kpi")
+box_ids <- c(
+  "total_consumption_box", "total_emissions_box", "avg_daily_usage_box",
+  "peak_usage_box", "efficiency_box", "facilities_count_box"
+)
 
-  # Check that it returns a tagList
-  expect_true(inherits(ui_result, "shiny.tag.list"))
-
-  # Convert to character to examine the HTML structure
+test_that("mod_kpi_cards_ui creates the six KPI outputs", {
+  ui_result <- mod_kpi_cards_ui("test_kpi")
   ui_html <- as.character(ui_result)
 
-  # Check for primary KPI boxes (first row)
-  expect_true(grepl('id="test_kpi-total_consumption_box"', ui_html))
-  expect_true(grepl('id="test_kpi-total_emissions_box"', ui_html))
-  expect_true(grepl('id="test_kpi-avg_daily_usage_box"', ui_html))
-
-  # Check for secondary KPI boxes (second row)
-  expect_true(grepl('id="test_kpi-peak_usage_box"', ui_html))
-  expect_true(grepl('id="test_kpi-efficiency_box"', ui_html))
-  expect_true(grepl('id="test_kpi-facilities_count_box"', ui_html))
-
-  # Check that there are output elements with correct class
-  expect_true(grepl('class="shiny-html-output"', ui_html))
-})
-
-test_that("mod_kpi_cards_extended_ui uses correct namespace", {
-  # Test with different module ID
-  ui_result <- mod_kpi_cards_extended_ui("dashboard_kpis")
-  ui_html <- as.character(ui_result)
-
-  # Check that namespace is correctly applied to all elements
-  expect_true(grepl('id="dashboard_kpis-total_consumption_box"', ui_html))
-  expect_true(grepl('id="dashboard_kpis-total_emissions_box"', ui_html))
-  expect_true(grepl('id="dashboard_kpis-avg_daily_usage_box"', ui_html))
-  expect_true(grepl('id="dashboard_kpis-peak_usage_box"', ui_html))
-  expect_true(grepl('id="dashboard_kpis-efficiency_box"', ui_html))
-  expect_true(grepl('id="dashboard_kpis-facilities_count_box"', ui_html))
-})
-
-test_that("mod_kpi_cards_extended_ui has correct layout structure", {
-  ui_result <- mod_kpi_cards_extended_ui("test")
-
-  # Check that we have a tagList with 2 elements (two layout_columns)
   expect_true(inherits(ui_result, "shiny.tag.list"))
+  for (box_id in box_ids) {
+    expect_true(grepl(paste0('id="test_kpi-', box_id, '"'), ui_html, fixed = TRUE), info = box_id)
+  }
+  expect_equal(length(gregexpr('class="shiny-html-output"', ui_html)[[1]]), 6)
+})
+
+test_that("mod_kpi_cards_ui uses correct namespace", {
+  ui_html <- as.character(mod_kpi_cards_ui("dashboard_kpis"))
+
+  for (box_id in box_ids) {
+    expect_true(grepl(paste0('id="dashboard_kpis-', box_id, '"'), ui_html, fixed = TRUE), info = box_id)
+  }
+})
+
+test_that("mod_kpi_cards_ui lays out two rows of three cards", {
+  ui_result <- mod_kpi_cards_ui("test")
+
   expect_equal(length(ui_result), 2)
-
-  # Check that each element in the tagList is a div with bslib_fragment class
-  expect_true(all(sapply(ui_result, function(x) {
+  expect_true(all(vapply(ui_result, function(x) {
     x$name == "div" && "bslib_fragment" %in% class(x)
-  })))
-
-  # Check that each layout has children (bslib creates 5 children including grid spacing)
-  expect_true(length(ui_result[[1]]$children) > 0) # First row has children
-  expect_true(length(ui_result[[2]]$children) > 0) # Second row has children
-
-  # Check that we have the expected number of uiOutput elements in the HTML
-  ui_html <- as.character(ui_result)
-  uiOutput_count <- length(gregexpr('class="shiny-html-output"', ui_html)[[1]])
-  expect_equal(uiOutput_count, 6) # 6 KPI boxes total
+  }, logical(1))))
 })
 
-test_that("mod_kpi_cards_ui creates correct basic UI structure", {
-  # Test the basic UI function
-  ui_result <- mod_kpi_cards_ui("basic_kpi")
+test_that("mod_kpi_cards_server renders each KPI from the filtered data", {
+  data <- make_energy_data()
 
-  # Check that it returns a single div element with bslib_fragment class
-  expect_true(inherits(ui_result, "shiny.tag"))
-  expect_equal(ui_result$name, "div")
-  expect_true("bslib_fragment" %in% class(ui_result))
-
-  # Check that it has children (bslib creates 5 children including grid spacing)
-  expect_true(length(ui_result$children) > 0)
-
-  # Convert to character and check for the three basic KPI boxes
-  ui_html <- as.character(ui_result)
-  expect_true(grepl('id="basic_kpi-total_consumption_box"', ui_html))
-  expect_true(grepl('id="basic_kpi-total_emissions_box"', ui_html))
-  expect_true(grepl('id="basic_kpi-avg_daily_usage_box"', ui_html))
-
-  # Should NOT contain extended KPI boxes
-  expect_false(grepl('id="basic_kpi-peak_usage_box"', ui_html))
-  expect_false(grepl('id="basic_kpi-efficiency_box"', ui_html))
-  expect_false(grepl('id="basic_kpi-facilities_count_box"', ui_html))
-
-  # Check that we have exactly 3 uiOutput elements
-  uiOutput_count <- length(gregexpr('class="shiny-html-output"', ui_html)[[1]])
-  expect_equal(uiOutput_count, 3)
-})
-
-# Server function tests
-test_that("mod_kpi_cards_server works with valid data", {
-  # Create mock data manager outside testServer
-  dm <- data_manager$new()
-
-  # Create reactive filtered data outside testServer
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02")),
-      site = c("Site A", "Site B"),
-      type = c("Electricity", "Gas"),
-      value = c(100, 150),
-      carbon_emission_in_kgco2e = c(10, 15)
-    )
-  })
-
-  expect_no_error({
-    testServer(
-      mod_kpi_cards_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Server should handle the data without errors
-        expect_true(TRUE)
-      }
-    )
+  testServer(mod_kpi_cards_server, args = list(filtered_data = reactive(data)), {
+    expect_match(output$total_consumption_box$html, "3,750 units")
+    expect_match(output$total_emissions_box$html, "375 kg CO2e")
+    expect_match(output$avg_daily_usage_box$html, "1,875 units/day")
+    expect_match(output$peak_usage_box$html, "2,950 units")
+    expect_match(output$efficiency_box$html, "10 units/kg CO2e")
+    expect_match(output$facilities_count_box$html, "3 facilities")
   })
 })
 
-test_that("mod_kpi_cards_extended_server works with valid data", {
-  dm <- data_manager$new()
+test_that("mod_kpi_cards_server updates when the data changes", {
+  filtered_data <- reactiveVal(make_energy_data())
 
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-      site = c("Site A", "Site B", "Site C"),
-      type = c("Electricity", "Gas", "Water"),
-      value = c(100, 150, 200),
-      carbon_emission_in_kgco2e = c(10, 15, 5)
-    )
-  })
+  testServer(mod_kpi_cards_server, args = list(filtered_data = filtered_data), {
+    expect_match(output$total_consumption_box$html, "3,750 units")
 
-  expect_no_error({
-    testServer(
-      mod_kpi_cards_extended_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Server should handle the data without errors
-        expect_true(TRUE)
-      }
-    )
+    filtered_data(make_energy_data()[1:2, ])
+    session$flushReact()
+    expect_match(output$total_consumption_box$html, "1,500 units")
   })
 })
 
-test_that("mod_kpi_cards_server handles empty data", {
-  dm <- data_manager$new()
-  filtered_data <- shiny::reactive({
-    data.frame()
-  })
-
-  expect_no_error({
-    testServer(
-      mod_kpi_cards_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle empty data gracefully
-        expect_true(TRUE)
-      }
-    )
-  })
-})
-
-test_that("mod_kpi_cards_extended_server handles empty data", {
-  dm <- data_manager$new()
-  filtered_data <- shiny::reactive({
-    data.frame()
-  })
-
-  expect_no_error({
-    testServer(
-      mod_kpi_cards_extended_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle empty data gracefully
-        expect_true(TRUE)
-      }
-    )
+test_that("mod_kpi_cards_server shows zeros for empty data", {
+  testServer(mod_kpi_cards_server, args = list(filtered_data = reactive(data.frame())), {
+    expect_match(output$total_consumption_box$html, "0 units")
+    expect_match(output$total_emissions_box$html, "0 kg CO2e")
+    expect_match(output$avg_daily_usage_box$html, "0 units/day")
+    expect_match(output$peak_usage_box$html, "--")
+    expect_match(output$efficiency_box$html, "0 units/kg CO2e")
+    expect_match(output$facilities_count_box$html, ">0<")
   })
 })
