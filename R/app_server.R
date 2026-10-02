@@ -7,7 +7,7 @@
 #' @importFrom shiny reactive
 app_server <- function(input, output, session) {
   # The app works on the data shipped in the package's data/ folder
-  energy_data <- reactive(load_sample_data())
+  data_manager <- reactive(EnergyDataManager$new())
 
-  mod_dashboard_server("energy_dashboard", energy_data)
+  mod_dashboard_server("energy_dashboard", data_manager)
 }
