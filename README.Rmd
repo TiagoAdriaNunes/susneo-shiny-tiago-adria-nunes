@@ -33,12 +33,12 @@ SUSNEO Energy Dashboard is an interactive energy dashboard built with R Shiny th
 
 The application features:
 
-- **Interactive Charts**: Time series, facility comparisons, and energy type distributions
+- **Interactive Charts**: Time series and facility comparison charts
 - **Linear Model Analysis**: CO2 emissions vs energy consumption correlation with statistical interpretation
 - **KPI Metrics**: Real-time calculation of consumption, emissions, and efficiency ratios
 - **Advanced Filtering**: Date ranges, facilities, and energy types
 - **Responsive Design**: Modern UI with bslib and Bootstrap
-- **Data Management**: CSV upload functionality with sample data
+- **Data Management**: Loads the dataset shipped in the package's `data/` folder and cleans it automatically
 
 ## Installation
 
@@ -83,7 +83,7 @@ head(sample_data)
 
 ### Data Format
 
-Your CSV files should include these columns:
+The dashboard reads the `sample_data` dataset from the package's `data/` folder (`data/sample_data.csv`). It has these columns:
 
 - `id`: Unique identifier
 - `site`: Facility/location name
@@ -91,6 +91,12 @@ Your CSV files should include these columns:
 - `type`: Energy type (Electricity, Gas, Water, etc.)
 - `value`: Energy consumption value
 - `carbon_emission_in_kgco2e`: Carbon emissions (optional)
+
+Things to know about the data:
+
+- **Dates are read day first.** A numeric date such as `03-04-2025` is read as 3 April (DD-MM-YYYY); layouts such as `2025-04-03` are accepted too.
+- **Unusable rows are dropped** when the data is loaded: rows with an unreadable date or a non-numeric `value`. A missing `carbon_emission_in_kgco2e` counts as 0.
+- **`value` has no unit.** Electricity, gas, water and the other types are measured in different units. When a selection mixes energy types the dashboard shows a warning, because the totals, charts and the linear model add those values together as they are. Select a single energy type for a like-for-like comparison.
 
 ## Features
 
@@ -105,13 +111,13 @@ Your CSV files should include these columns:
   - Plain-language interpretation of statistical significance
   - Relationship strength and direction analysis
 - **Data Table**: Detailed summary table with filtering and sorting capabilities
+- **Mixed-units warning**: Shown above the KPI cards whenever the selection combines several energy types
 
 ### Data Management
 
-- **CSV Upload**: Import your own energy consumption data
-- **Sample Data**: Built-in demonstration dataset
-- **Data Validation**: Automatic validation of required columns and data types
-- **Date Processing**: Flexible date parsing supporting multiple formats
+- **Sample Data**: Built-in dataset loaded from the package's `data/` folder
+- **Data Cleaning**: Dates are parsed and values checked; unusable rows are dropped
+- **Date Processing**: Flexible date parsing supporting multiple formats; ambiguous numeric dates are read day first (DD-MM-YYYY)
 
 ### Filtering & Interactivity
 
@@ -127,24 +133,7 @@ Your CSV files should include these columns:
 # Start the application
 susneoEnergyDashboard::run_app()
 
-# The app will open in your default browser
-# Use "Load Sample Data" to see the demo
-```
-
-### Working with Custom Data
-```{r, eval = FALSE}
-# Prepare your data with required columns
-my_data <- data.frame(
-  id = 1:100,
-  site = rep(c("Building_A", "Building_B"), 50),
-  date = seq(as.Date("2024-01-01"), by = "day", length.out = 100),
-  type = rep(c("Electricity", "Gas"), 50),
-  value = rnorm(100, 1000, 200),
-  carbon_emission_in_kgco2e = rnorm(100, 50, 10)
-)
-
-# Save as CSV and upload through the app interface
-write.csv(my_data, "my_energy_data.csv", row.names = FALSE)
+# The app opens in your default browser and shows the sample data
 ```
 
 ## Development
@@ -174,9 +163,8 @@ susneo/
 ├── R/                          # R source code
 │   ├── app_*.R                # App configuration
 │   ├── mod_*.R                # Shiny modules
-│   ├── fct_*.R                # Business logic functions
-│   ├── utils_*.R              # Utility functions
-│   └── class_data_manager.R   # Data management class
+│   ├── fct_*.R                # Business logic as pure functions (data, charts, KPIs, linear model)
+│   └── utils_*.R              # Utility functions
 ├── data/                      # Package data
 ├── tests/                     # Unit tests
 ├── inst/                      # Package assets
@@ -262,7 +250,14 @@ covr::package_coverage()
 ```
 
 ### Recent Updates
-#### Version 0.0.0.9010 (Latest)
+#### Unreleased
+- **Fixed**: the linear model no longer fails when emissions do not vary; it needs at least 3 complete rows, and the p-value explanation is corrected
+- **Fixed**: large round totals are no longer shown in scientific notation (for example `1e+06`)
+- **Added**: warning when a selection mixes energy types (they can use different units)
+- **Changed**: the data layer is now plain functions (`fct_data.R`, `fct_linear_model.R`) instead of an R6 class, and all package code uses `importFrom` instead of `pkg::fn`
+- **Removed**: the CSV upload and "Load Sample Data" code, which was never reachable from the app, and the energy type pie chart and trend chart, which were never displayed
+
+#### Version 0.0.0.9010
 - **Linear Model Analysis**: New statistical analysis module for CO2 emissions vs energy consumption
   - Interactive scatter plot with regression line visualization
   - Comprehensive model summary table with statistical metrics

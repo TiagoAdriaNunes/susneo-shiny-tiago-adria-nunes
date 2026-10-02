@@ -4,16 +4,15 @@ export(run_app)
 importFrom(DT,
   dataTableOutput,
   datatable,
+  formatRound,
   renderDataTable
 )
-importFrom(R6,R6Class)
 importFrom(bsicons,bs_icon)
 importFrom(bslib,
   card,
   card_body,
   card_header,
   layout_column_wrap,
-  layout_columns,
   page_sidebar,
   sidebar,
   value_box
@@ -21,15 +20,12 @@ importFrom(bslib,
 importFrom(dplyr,
   arrange,
   desc,
-  filter,
   group_by,
-  lag,
-  mutate,
+  n,
   summarise
 )
 importFrom(glue,glue)
 importFrom(golem,
-  activate_js,
   add_resource_path,
   bundle_resources,
   favicon,
@@ -38,6 +34,7 @@ importFrom(golem,
 importFrom(highcharter,
   hc_add_series,
   hc_colors,
+  hc_size,
   hc_title,
   hc_tooltip,
   hc_xAxis,
@@ -61,23 +58,21 @@ importFrom(shiny,
   dateRangeInput,
   debounce,
   div,
-  fileInput,
   fluidRow,
-  h1,
   h3,
   h5,
   htmlOutput,
-  isolate,
   moduleServer,
   observe,
   observeEvent,
+  p,
   reactive,
-  reactiveVal,
   renderUI,
   req,
   selectizeInput,
   shinyApp,
   showNotification,
+  strong,
   tagList,
   tags,
   uiOutput,
@@ -86,7 +81,10 @@ importFrom(shiny,
   useBusyIndicators
 )
 importFrom(stats,
+  lm,
+  nobs,
   pf,
-  predict
+  predict,
+  reformulate
 )
-importFrom(utils,read.csv)
+importFrom(utils,globalVariables)

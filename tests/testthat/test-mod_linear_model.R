@@ -1,359 +1,116 @@
-test_that("mod_linear_model_ui function exists", {
-  # Basic test to ensure the function is defined
-  expect_true(exists("mod_linear_model_ui"))
-  expect_true(is.function(mod_linear_model_ui))
-})
+make_filtered_data <- function(n = 6) {
+  data.frame(
+    date = as.Date("2024-01-01") + seq_len(n) - 1,
+    site = rep(c("Site A", "Site B"), length.out = n),
+    type = rep(c("Electricity", "Gas", "Water"), length.out = n),
+    value = c(8156, 96086, 12805, 46952, 75316, 40284)[seq_len(n)],
+    carbon_emission_in_kgco2e = c(28, 79, 62, 75, 1, 53)[seq_len(n)]
+  )
+}
 
-test_that("mod_linear_model_ui accepts id parameter", {
-  # Test that the function can be called with an ID
-  expect_no_error({
-    ui_result <- mod_linear_model_ui("test_linear")
-    expect_true(!is.null(ui_result))
-  })
-})
+# UI --------------------------------------------------------------------------
 
-test_that("mod_linear_model_ui creates proper structure", {
+test_that("mod_linear_model_ui creates the expected outputs", {
   ui_result <- mod_linear_model_ui("test_linear")
-  
-  # Basic structure tests
+  ui_html <- as.character(ui_result)
+
   expect_true(inherits(ui_result, "shiny.tag"))
-  
-  # Convert to HTML to check content
-  ui_html <- as.character(ui_result)
-  expect_true(nchar(ui_html) > 100)
-  
-  # Check for namespace in IDs
-  expect_true(grepl("test_linear-", ui_html))
+  expect_match(ui_html, "Linear Model")
+  expect_match(ui_html, "Results")
+  expect_match(ui_html, 'id="test_linear-model_summary_table"', fixed = TRUE)
+  expect_match(ui_html, 'id="test_linear-model_interpretation"', fixed = TRUE)
+  expect_match(ui_html, 'id="test_linear-scatter_plot"', fixed = TRUE)
 })
 
-test_that("mod_linear_model_ui contains required elements", {
-  ui_result <- mod_linear_model_ui("test")
-  ui_html <- as.character(ui_result)
-  
-  # Check for key text content
-  expect_true(grepl("Linear Model", ui_html))
-  expect_true(grepl("Results", ui_html))
-})
+# Server ----------------------------------------------------------------------
 
-# Server function tests
-test_that("mod_linear_model_server works with valid data", {
-  # Create mock data manager with linear model method
-  dm <- data_manager$new()
+test_that("mod_linear_model_server fits the model once and renders every output", {
+  data <- make_filtered_data()
 
-  # Create reactive filtered data with required columns (more realistic variance)
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05", "2024-01-06")),
-      site = c("Site A", "Site B", "Site A", "Site B", "Site A", "Site B"),
-      type = c("Electricity", "Gas", "Electricity", "Gas", "Water", "Fuel"),
-      value = c(8156, 96086, 12805, 46952, 75316, 40284),
-      carbon_emission_in_kgco2e = c(28, 79, 62, 75, 1, 53)
-    )
-  })
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(data)), {
+    expect_s3_class(model(), "lm")
 
-  expect_no_error({
-    testServer(
-      mod_linear_model_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Server should handle the data without errors
-        expect_true(TRUE)
-      }
-    )
+    expect_match(output$scatter_plot, "Regression Line")
+    expect_match(output$scatter_plot, "CO2 Emissions vs Energy Consumption")
+    expect_match(output$model_summary_table, "Interpretation")
+    expect_match(output$model_interpretation$html, "What do these numbers mean?", fixed = TRUE)
+    expect_match(output$model_interpretation$html, "relationship")
   })
 })
 
-test_that("mod_linear_model_server handles empty data", {
-  dm <- data_manager$new()
-  filtered_data <- shiny::reactive({
-    data.frame()
-  })
+test_that("mod_linear_model_server explains when there is too little data", {
+  # A single point cannot be modelled
+  one_row <- make_filtered_data(1)
 
-  expect_no_error({
-    testServer(
-      mod_linear_model_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle empty data gracefully
-        expect_true(TRUE)
-      }
-    )
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(one_row)), {
+    expect_null(model())
+    expect_no_error(output$model_summary_table)
+    expect_match(output$model_interpretation$html, "No model available")
+    # The points are still plotted, just without a line
+    expect_false(grepl("Regression Line", output$scatter_plot))
   })
 })
 
-test_that("mod_linear_model_server handles missing columns", {
-  dm <- data_manager$new()
+test_that("mod_linear_model_server survives constant emissions", {
+  # Regression: a constant predictor used to crash the summary table
+  constant <- make_filtered_data()
+  constant$carbon_emission_in_kgco2e <- 5
 
-  # Data missing required columns
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02")),
-      site = c("Site A", "Site B"),
-      type = c("Electricity", "Gas"),
-      value = c(100, 150)
-      # Missing carbon_emission_in_kgco2e column
-    )
-  })
-
-  expect_no_error({
-    testServer(
-      mod_linear_model_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle missing columns gracefully
-        expect_true(TRUE)
-      }
-    )
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(constant)), {
+    expect_null(model())
+    expect_no_error(output$model_summary_table)
+    expect_match(output$model_interpretation$html, "No model available")
+    expect_false(grepl("Regression Line", output$scatter_plot))
   })
 })
 
-test_that("mod_linear_model_server handles data with NA values", {
-  dm <- data_manager$new()
+test_that("mod_linear_model_server does not warn when it cannot fit a model", {
+  constant <- make_filtered_data()
+  constant$carbon_emission_in_kgco2e <- 5
 
-  # Data with NA values
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04")),
-      site = c("Site A", "Site B", "Site A", "Site B"),
-      type = c("Electricity", "Gas", "Electricity", "Gas"),
-      value = c(100, NA, 120, 180),
-      carbon_emission_in_kgco2e = c(10, 15, NA, 18)
-    )
-  })
-
-  expect_no_error({
-    testServer(
-      mod_linear_model_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle NA values gracefully
-        expect_true(TRUE)
-      }
-    )
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(constant)), {
+    expect_no_warning(model())
   })
 })
 
-test_that("mod_linear_model_server generates model summary table", {
-  dm <- data_manager$new()
+test_that("mod_linear_model_server ignores rows with missing values", {
+  with_na <- make_filtered_data()
+  with_na$value[2] <- NA
+  with_na$carbon_emission_in_kgco2e[3] <- NA
 
-  # Valid data for linear modeling (using sample-like data)
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05")),
-      site = c("Site A", "Site B", "Site A", "Site B", "Site A"),
-      type = c("Electricity", "Gas", "Electricity", "Gas", "Water"),
-      value = c(8156, 96086, 12805, 46952, 75316),
-      carbon_emission_in_kgco2e = c(28, 79, 62, 75, 1)
-    )
-  })
-
-  testServer(
-    mod_linear_model_server,
-    args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ),
-    {
-      # Trigger the reactive by accessing the output
-      output_result <- output$model_summary_table
-
-      # The output should be generated without error
-      expect_true(TRUE)
-    }
-  )
-})
-
-test_that("mod_linear_model_server generates scatter plot", {
-  dm <- data_manager$new()
-
-  # Valid data for plotting (more realistic variance)
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04")),
-      site = c("Site A", "Site B", "Site A", "Site B"),
-      type = c("Electricity", "Gas", "Water", "Fuel"),
-      value = c(8156, 96086, 75316, 40284),
-      carbon_emission_in_kgco2e = c(28, 79, 1, 53)
-    )
-  })
-
-  testServer(
-    mod_linear_model_server,
-    args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ),
-    {
-      # Trigger the reactive by accessing the output
-      output_result <- output$scatter_plot
-
-      # The output should be generated without error
-      expect_true(TRUE)
-    }
-  )
-})
-
-test_that("mod_linear_model_server generates interpretation", {
-  dm <- data_manager$new()
-
-  # Valid data for interpretation (realistic variance)
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04")),
-      site = c("Site A", "Site B", "Site A", "Site B"),
-      type = c("Electricity", "Gas", "Water", "Fuel"),
-      value = c(8156, 96086, 75316, 40284),
-      carbon_emission_in_kgco2e = c(28, 79, 1, 53)
-    )
-  })
-
-  testServer(
-    mod_linear_model_server,
-    args = list(
-      data_manager = dm,
-      filtered_data = filtered_data
-    ),
-    {
-      # Trigger the reactive by accessing the output
-      output_result <- output$model_interpretation
-
-      # The output should be generated without error
-      expect_true(TRUE)
-    }
-  )
-})
-
-test_that("mod_linear_model_server handles insufficient data for modeling", {
-  dm <- data_manager$new()
-
-  # Only one data point - insufficient for linear modeling
-  filtered_data <- shiny::reactive({
-    data.frame(
-      date = as.Date("2024-01-01"),
-      site = "Site A",
-      type = "Electricity",
-      value = 100,
-      carbon_emission_in_kgco2e = 10
-    )
-  })
-
-  expect_no_error({
-    testServer(
-      mod_linear_model_server,
-      args = list(
-        data_manager = dm,
-        filtered_data = filtered_data
-      ),
-      {
-        # Should handle insufficient data gracefully
-        expect_true(TRUE)
-      }
-    )
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(with_na)), {
+    expect_equal(nobs(model()), 4)
+    expect_match(output$scatter_plot, "Regression Line")
   })
 })
 
-test_that("linear model interpretation logic works correctly", {
-  # Test the R-squared interpretation logic
-  expect_equal({
-    r_squared <- 0.8
-    if (r_squared >= 0.7) "very well"
-    else if (r_squared >= 0.5) "reasonably well"
-    else if (r_squared >= 0.3) "some variation"
-    else "little variation"
-  }, "very well")
+test_that("mod_linear_model_server handles data without the emissions column", {
+  no_emissions <- make_filtered_data()[, c("date", "site", "type", "value")]
 
-  expect_equal({
-    r_squared <- 0.6
-    if (r_squared >= 0.7) "very well"
-    else if (r_squared >= 0.5) "reasonably well"
-    else if (r_squared >= 0.3) "some variation"
-    else "little variation"
-  }, "reasonably well")
-
-  expect_equal({
-    r_squared <- 0.4
-    if (r_squared >= 0.7) "very well"
-    else if (r_squared >= 0.5) "reasonably well"
-    else if (r_squared >= 0.3) "some variation"
-    else "little variation"
-  }, "some variation")
-
-  expect_equal({
-    r_squared <- 0.2
-    if (r_squared >= 0.7) "very well"
-    else if (r_squared >= 0.5) "reasonably well"
-    else if (r_squared >= 0.3) "some variation"
-    else "little variation"
-  }, "little variation")
-})
-
-test_that("significance level interpretation works correctly", {
-  # Test the p-value interpretation logic
-  expect_true({
-    p_val <- 0.0005
-    result <- if (p_val < 0.001) "highly significant"
-    else if (p_val < 0.01) "significant (0.01)"
-    else if (p_val < 0.05) "significant (0.05)"
-    else "not significant"
-    result == "highly significant"
-  })
-
-  expect_true({
-    p_val <- 0.005
-    result <- if (p_val < 0.001) "highly significant"
-    else if (p_val < 0.01) "significant (0.01)"
-    else if (p_val < 0.05) "significant (0.05)"
-    else "not significant"
-    result == "significant (0.01)"
-  })
-
-  expect_true({
-    p_val <- 0.03
-    result <- if (p_val < 0.001) "highly significant"
-    else if (p_val < 0.01) "significant (0.01)"
-    else if (p_val < 0.05) "significant (0.05)"
-    else "not significant"
-    result == "significant (0.05)"
-  })
-
-  expect_true({
-    p_val <- 0.1
-    result <- if (p_val < 0.001) "highly significant"
-    else if (p_val < 0.01) "significant (0.01)"
-    else if (p_val < 0.05) "significant (0.05)"
-    else "not significant"
-    result == "not significant"
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(no_emissions)), {
+    expect_null(model())
+    expect_no_error(output$model_summary_table)
+    expect_match(output$model_interpretation$html, "No model available")
+    expect_error(output$scatter_plot, class = "shiny.silent.error")
   })
 })
 
-test_that("relationship direction detection works correctly", {
-  # Test positive relationship
-  expect_equal({
-    slope <- 2.5
-    if (slope > 0) "positive" else "negative"
-  }, "positive")
+test_that("mod_linear_model_server stays silent for empty data", {
+  testServer(mod_linear_model_server, args = list(filtered_data = reactive(data.frame())), {
+    expect_error(model(), class = "shiny.silent.error")
+    expect_error(output$model_summary_table, class = "shiny.silent.error")
+    expect_error(output$model_interpretation, class = "shiny.silent.error")
+    expect_error(output$scatter_plot, class = "shiny.silent.error")
+  })
+})
 
-  # Test negative relationship
-  expect_equal({
-    slope <- -1.3
-    if (slope > 0) "positive" else "negative"
-  }, "negative")
+test_that("mod_linear_model_server follows changes in the data", {
+  filtered_data <- reactiveVal(make_filtered_data(2))
 
-  # Test zero slope (edge case)
-  expect_equal({
-    slope <- 0
-    if (slope > 0) "positive" else "negative"
-  }, "negative")
+  testServer(mod_linear_model_server, args = list(filtered_data = filtered_data), {
+    expect_null(model())
+
+    filtered_data(make_filtered_data(6))
+    expect_s3_class(model(), "lm")
+  })
 })

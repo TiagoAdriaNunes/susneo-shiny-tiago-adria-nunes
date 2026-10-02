@@ -44,38 +44,18 @@ test_that("format_daily_usage_units works correctly", {
   expect_equal(format_daily_usage_units(987), "987 units/day")
 })
 
-test_that("format_percentage works correctly", {
-  # Test normal percentages
-  expect_equal(format_percentage(45.67), "45.7%")
-  expect_equal(format_percentage(100), "100%")
-  expect_equal(format_percentage(0), "0%")
-
-  # Test with different decimal places
-  expect_equal(format_percentage(45.67, 0), "46%")
-  expect_equal(format_percentage(45.67, 2), "45.67%")
-
-  # Test edge cases
-  expect_equal(format_percentage(NA), "--")
-  expect_equal(format_percentage(NULL), "--")
-
-  # Test rounding
-  expect_equal(format_percentage(45.666, 1), "45.7%")
-  expect_equal(format_percentage(45.634, 1), "45.6%")
-})
-
 test_that("formatting functions handle extreme values", {
-  # Test very large numbers
+  # Test very large numbers (never scientific notation, even for round totals)
   large_number <- 999999999
-  expect_equal(format_number_with_commas(large_number), "1e+09")
-  expect_equal(format_energy_units(large_number), "1e+09 units")
+  expect_equal(format_number_with_commas(large_number), "999,999,999")
+  expect_equal(format_energy_units(large_number), "999,999,999 units")
+  expect_equal(format_number_with_commas(1e6), "1,000,000")
+  expect_equal(format_number_with_commas(12e6), "12,000,000")
+  expect_equal(format_energy_units(1e9), "1,000,000,000 units")
 
   # Test very small numbers
   expect_equal(format_number_with_commas(1), "1")
   expect_equal(format_energy_units(1), "1 units")
-
-  # Test percentage edge cases
-  expect_equal(format_percentage(0.1, 1), "0.1%")
-  expect_equal(format_percentage(99.99, 1), "100%")
 })
 
 test_that("formatting functions are consistent", {

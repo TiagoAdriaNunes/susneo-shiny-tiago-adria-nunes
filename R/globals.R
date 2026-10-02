@@ -4,10 +4,14 @@
 #' to avoid R CMD check warnings about "no visible binding for global variable"
 #'
 #' @noRd
-utils::globalVariables(c(
+#'
+#' @importFrom utils globalVariables
+globalVariables(c(
+  "carbon_emission_in_kgco2e",
+  "date",
   "site",
+  "total_consumption",
   "total_value",
   "type",
-  "value",
-  "date"
+  "value"
 ))

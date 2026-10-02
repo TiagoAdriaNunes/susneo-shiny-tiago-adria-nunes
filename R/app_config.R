@@ -35,6 +35,7 @@ get_golem_config <- function(
   # Modify this if your config file is somewhere else
   file = app_sys("golem-config.yml")
 ) {
+  # Kept prefixed on purpose: importing config::get() would mask base::get()
   config::get(
     value = value,
     config = config,

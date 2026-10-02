@@ -8,8 +8,9 @@
 #'   \item{id}{Unique identifier for each record}
 #'   \item{site}{Facility/site identifier (character)}
 #'   \item{date}{Date of measurement in DD-MM-YYYY format (character)}
-#'   \item{type}{Type of energy consumption: Water, Electricity, Waste, or Gas (character)}
-#'   \item{value}{Energy consumption value (numeric)}
+#'   \item{type}{Type of energy consumption: Electricity, Fuel, Gas, Waste, or Water (character)}
+#'   \item{value}{Consumption value (numeric). The data has no unit column and each type is
+#'     measured in its own unit, so values of different types should not be added together.}
 #'   \item{carbon_emission_in_kgco2e}{Carbon emissions in kg CO2 equivalent (numeric)}
 #' }
 #'

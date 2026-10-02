@@ -6,18 +6,19 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList h1 dateRangeInput updateDateRangeInput selectizeInput actionButton div h3 br
-#' @importFrom glue glue
-#' @importFrom DT dataTableOutput
-#' @importFrom highcharter highchartOutput
-#' @importFrom bslib value_box card card_header card_body page_sidebar sidebar layout_columns layout_column_wrap
 #' @importFrom bsicons bs_icon
+#' @importFrom bslib card card_body card_header layout_column_wrap page_sidebar sidebar
+#' @importFrom DT datatable dataTableOutput formatRound renderDataTable
+#' @importFrom highcharter highchartOutput renderHighchart
+#' @importFrom shiny actionButton br dateRangeInput debounce div h3 moduleServer NS observe observeEvent reactive
+#' @importFrom shiny renderUI req selectizeInput showNotification tagList tags uiOutput updateDateRangeInput
+#' @importFrom shiny updateSelectizeInput
 mod_dashboard_ui <- function(id) {
   ns <- NS(id)
 
-  bslib::page_sidebar(
+  page_sidebar(
     title = "SUSNEO Energy Dashboard",
-    sidebar = bslib::sidebar(
+    sidebar = sidebar(
       width = 300,
       h3("Filters"),
       dateRangeInput(
@@ -53,31 +54,32 @@ mod_dashboard_ui <- function(id) {
         )
       )
     ),
+    uiOutput(ns("mixed_units_note")),
     mod_kpi_cards_ui(ns("kpi_cards")),
-    bslib::layout_column_wrap(
+    layout_column_wrap(
       width = "500px",
       fill = FALSE,
-      bslib::card(
+      card(
         full_screen = TRUE,
-        bslib::card_header("Energy Consumption Over Time"),
-        bslib::card_body(
-          highcharter::highchartOutput(ns("time_series_plot"))
+        card_header("Energy Consumption Over Time"),
+        card_body(
+          highchartOutput(ns("time_series_plot"))
         )
       ),
-      bslib::card(
+      card(
         full_screen = TRUE,
-        bslib::card_header("Energy Usage by Facility"),
-        bslib::card_body(
-          highcharter::highchartOutput(ns("facility_comparison"))
+        card_header("Energy Usage by Facility"),
+        card_body(
+          highchartOutput(ns("facility_comparison"))
         )
       )
     ),
-    bslib::card(
+    card(
       min_height = 400,
       full_screen = TRUE,
-      bslib::card_header("Data Summary"),
-      bslib::card_body(
-        DT::dataTableOutput(ns("data_table"))
+      card_header("Data Summary"),
+      card_body(
+        dataTableOutput(ns("data_table"))
       )
     ),
     mod_linear_model_ui(ns("linear_model"))
@@ -86,52 +88,50 @@ mod_dashboard_ui <- function(id) {
 
 #' dashboard Server Functions
 #'
-#' @param data_manager Data manager instance from data upload module
+#' @param id Module ID
+#' @param energy_data Reactive with the cleaned energy data
+#'
+#' @return The debounced reactive with the filtered data
+#'
 #' @noRd
-#' @importFrom shiny moduleServer reactive observe updateSelectizeInput debounce
-#' @importFrom shiny updateDateRangeInput renderUI observeEvent showNotification isolate req
-#' @importFrom DT renderDataTable datatable
-#' @importFrom highcharter renderHighchart hchart hc_add_series hc_title hc_xAxis hc_yAxis
-mod_dashboard_server <- function(id, data_manager) {
+mod_dashboard_server <- function(id, energy_data) {
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-
+    # Refresh the filter choices whenever new data is loaded
     observe({
-      req(data_manager$is_data_loaded())
+      data <- energy_data()
+      req(nrow(data) > 0)
 
-      isolate({
-        facilities <- data_manager$get_facilities()
-        energy_types <- data_manager$get_energy_types()
-        date_range <- data_manager$get_date_range()
+      date_range <- get_date_range(data)
 
-        updateSelectizeInput(
-          session,
-          "facilities",
-          choices = facilities,
-          selected = NULL
-        )
+      updateSelectizeInput(
+        session,
+        "facilities",
+        choices = get_facilities(data),
+        selected = NULL
+      )
 
-        updateSelectizeInput(
-          session,
-          "energy_types",
-          choices = energy_types,
-          selected = NULL
-        )
+      updateSelectizeInput(
+        session,
+        "energy_types",
+        choices = get_energy_types(data),
+        selected = NULL
+      )
 
-        updateDateRangeInput(
-          session,
-          "date_range",
-          start = date_range[1],
-          end = date_range[2],
-          min = date_range[1],
-          max = date_range[2]
-        )
-      })
+      updateDateRangeInput(
+        session,
+        "date_range",
+        start = date_range[1],
+        end = date_range[2],
+        min = date_range[1],
+        max = date_range[2]
+      )
     })
 
     observeEvent(input$reset_filters, {
-      if (data_manager$is_data_loaded()) {
-        date_range <- data_manager$get_date_range()
+      data <- energy_data()
+
+      if (nrow(data) > 0) {
+        date_range <- get_date_range(data)
 
         updateDateRangeInput(
           session,
@@ -152,15 +152,12 @@ mod_dashboard_server <- function(id, data_manager) {
     })
 
     filtered_data <- reactive({
-      req(data_manager$is_data_loaded())
-      req(input$date_range)
+      data <- energy_data()
+      req(nrow(data) > 0)
+      req(length(input$date_range) == 2)
 
-      # Ensure we have valid date range
-      if (is.null(input$date_range) || length(input$date_range) != 2) {
-        return(data.frame())
-      }
-
-      data_manager$apply_filters(
+      filter_energy_data(
+        data,
         date_range = input$date_range,
         facilities = input$facilities,
         energy_types = input$energy_types
@@ -169,45 +166,52 @@ mod_dashboard_server <- function(id, data_manager) {
       debounce(500) # 500ms delay to prevent rapid re-rendering
 
     # KPI Cards submodule
-    mod_kpi_cards_server("kpi_cards", data_manager, filtered_data)
+    mod_kpi_cards_server("kpi_cards", filtered_data)
 
     # Linear Model submodule
-    mod_linear_model_server("linear_model", data_manager, filtered_data)
+    mod_linear_model_server("linear_model", filtered_data)
+
+    output$mixed_units_note <- renderUI({
+      message <- mixed_units_message(filtered_data())
+      req(message)
+
+      div(
+        class = "alert alert-warning py-2 mb-0",
+        role = "alert",
+        bs_icon("exclamation-triangle"),
+        " ",
+        message
+      )
+    })
 
     # Charts using extracted functions with validation
-    output$time_series_plot <- highcharter::renderHighchart({
+    output$time_series_plot <- renderHighchart({
       data <- filtered_data()
-      req(data)
       req(nrow(data) > 0)
 
-      create_time_series_chart(data, data_manager)
+      create_time_series_chart(data)
     })
 
-    output$facility_comparison <- highcharter::renderHighchart({
+    output$facility_comparison <- renderHighchart({
       data <- filtered_data()
-      req(data)
       req(nrow(data) > 0)
 
-      create_facility_chart(data, data_manager)
+      create_facility_chart(data)
     })
 
-    output$data_table <- DT::renderDataTable({
+    output$data_table <- renderDataTable({
       data <- filtered_data()
-      req(data)
 
       if (nrow(data) == 0) {
-        return(DT::datatable(
+        return(datatable(
           data.frame("No data available" = character(0)),
           rownames = FALSE,
           options = list(dom = "t")
         ))
       }
 
-      summary_data <- data_manager$prepare_summary_data(data)
-      req(summary_data)
-
-      DT::datatable(
-        summary_data,
+      datatable(
+        prepare_summary_data(data),
         rownames = FALSE,
         options = list(
           pageLength = 10,
@@ -225,16 +229,17 @@ mod_dashboard_server <- function(id, data_manager) {
           "Records"
         )
       ) |>
-        DT::formatCurrency(
+        formatRound(
           columns = c(
             "total_consumption",
             "total_emissions",
             "avg_consumption"
           ),
-          currency = "",
           digits = 0,
           mark = ","
         )
     })
+
+    filtered_data
   })
 }
