@@ -250,7 +250,7 @@ covr::package_coverage()
 ```
 
 ### Recent Updates
-#### Unreleased
+#### Version `r golem::pkg_version()`
 - **Fixed**: the linear model no longer fails when emissions do not vary; it needs at least 3 complete rows, and the p-value explanation is corrected
 - **Fixed**: large round totals are no longer shown in scientific notation (for example `1e+06`)
 - **Added**: warning when a selection mixes energy types (they can use different units)
